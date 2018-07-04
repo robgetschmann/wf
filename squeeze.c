@@ -40,34 +40,15 @@
  * ===========================================================================
  */
 
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <squeeze.h>
 
-/*
- * Forward Declarations.
- */
-static int isalpha(int c);
-static int tolower(int c);
-
 static int __attribute__ ((unused))
 squeeze_main(int argc, char** argv);
-
-/**
- * @brief
- * @details
- * @param
- * @return
- */
-int
-isalpha(int c)
-{
-
-    return (((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) ? 1 : 0);
-
-}
 
 /**
  * @brief
@@ -81,35 +62,44 @@ squeeze(FILE* ifp,
 {
 
     char buffer[4096];
-    bool squeezing = false;
-    int rc;
+    bool squeezing;
+    int length;
+    char byte;
+    int read_count;
+    int status;
 
     setvbuf(ofp, buffer, _IOLBF, sizeof(buffer));
     squeezing = false;
-    rc = 0;
+    read_count = 0;
+    status = 0;;
+    length = 0;
 
-    for (char c; (c = fgetc(ifp)) != EOF; ) {
-        if (isalpha(c)) {
-            fputc(tolower(c), ofp);
+    while (read_count = fread(&byte, 1, 1, ifp)) {
+
+        if (isalpha(byte)) {
+            fputc(tolower(byte), ofp);
+            length++;
             squeezing = false;
         }
-        else if (squeezing == false) {
+        else if (length != 0 && squeezing == false) {
             fputc('\n', ofp);
+            length = 0;
             squeezing = true;
         }
+
     }
 
     /* End of input reached, flush the output stream. */
     if (feof(ifp)) {
         fflush(ofp);
-        rc = 0;
+        status = 0;
     }
     /* An input error occurred, fail the function. */
     else if (ferror(ifp)) {
-        rc = -1;
+        status = -1;
     }
 
-    return (rc);
+    return (status);
 
 }
 
@@ -125,25 +115,6 @@ squeeze_main(int argc,
 {
 
     exit(squeeze(stdin, stdout));
-
-}
-
-
-/**
- * @brief
- * @details
- * @param
- * @return
- */
-int
-tolower(int c)
-{
-
-    if (c >= 'A' && c <= 'Z') {
-        c = c - 'A' + 'a';
-    }
-
-    return (c);
 
 }
 

@@ -46,8 +46,8 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-extern int count(FILE*, FILE*);
-extern int squeeze(FILE*, FILE*);
+#include <count.h>
+#include <squeeze.h>
 
 /*
  * Forward Declarations.
@@ -104,11 +104,14 @@ main(int argc,
     }
 
     int comm[2];
+    int rc;
 
-    pipe(comm);
+    rc = pipe(comm);
+
+    if (-1 == rc) {
+    }
 
     pid_t child;
-    int rc;
 
     switch (child = fork()) {
 
@@ -125,7 +128,7 @@ main(int argc,
 
             close(comm[0]);
 
-            ifp = stdin;
+            ifp = wf_ifp;
             ofp = fdopen(comm[1], "w");
 
             rc = squeeze(ifp, ofp);

@@ -40,7 +40,37 @@
  * ===========================================================================
  */
 
+#include <stdbool.h>
+#include <stdint.h>
+
+#include <trie.h>
+
 #pragma once
+
+enum {
+    MAX_WORD_SIZE = 30
+};
+
+typedef struct MinHeapNode MinHeapNode;
+typedef struct MinHeap MinHeap;
+
+struct MinHeapNode {
+	TrieNode* root;
+	unsigned frequency;
+	char* word;
+};
+
+struct MinHeap {
+	unsigned capacity;
+	int count;
+	MinHeapNode* array;
+};
+
+MinHeap* createMinHeap( int capacity );
+void swapMinHeapNodes(MinHeapNode* a, MinHeapNode* b);
+void minHeapify( MinHeap* minHeap, int idx );
+void buildMinHeap( MinHeap* minHeap );
+void insertInMinHeap( MinHeap* minHeap, TrieNode** root, const char* word );
 
 /*
  * vim: cindent:cinoptions+={0,>1s,(0,t0,l1,^0:expandtab:smartindent:sw=4:ts=4:tw=0

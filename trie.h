@@ -40,7 +40,27 @@
  * ===========================================================================
  */
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #pragma once
+
+enum {
+    MAXIMUM_CHARACTERS = 26
+};
+
+typedef struct TrieNode TrieNode;
+
+struct TrieNode {
+
+    bool isEnd;
+    uint32_t frequency;
+    int indexMinHeap;
+    TrieNode* child[MAXIMUM_CHARACTERS];
+
+};
+
+TrieNode* newTrieNode(void);
 
 /*
  * vim: cindent:cinoptions+={0,>1s,(0,t0,l1,^0:expandtab:smartindent:sw=4:ts=4:tw=0

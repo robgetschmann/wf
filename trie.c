@@ -40,7 +40,23 @@
  * ===========================================================================
  */
 
+#include <stdlib.h>
+
 #include <trie.h>
+
+TrieNode*
+newTrieNode(void)
+{
+
+	TrieNode* trieNode = calloc(1, sizeof(TrieNode));
+
+	trieNode->isEnd = 0;
+	trieNode->frequency = 0;
+	trieNode->indexMinHeap = -1;
+
+	return (trieNode);
+
+}
 
 /*
  * vim: cindent:cinoptions+={0,>1s,(0,t0,l1,^0:expandtab:smartindent:sw=4:ts=4:tw=0

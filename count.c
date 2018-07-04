@@ -40,17 +40,84 @@
  * ===========================================================================
  */
 
+#include <ctype.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include <count.h>
+#include <heap.h>
+#include <trie.h>
 
 /*
  * Forward Declarations.
  */
 static int __attribute__ ((unused))
-count_main(int argc, char** argv);
+    count_main(int argc, char** argv);
+
+    // Inserts a new word to both Trie and Heap
+void insertUtil(TrieNode** root,
+                MinHeap* minHeap,
+                const char* word,
+                const char* dupWord)
+{
+
+    // Base Case
+    if (*root == NULL) {
+        *root = newTrieNode();
+    }
+
+    // There are still more characters in word
+    if (*word != '\0' ) {
+        insertUtil(&((*root)->child[tolower(*word ) - 97]),
+                   minHeap,
+                   word + 1,dupWord);
+    }
+
+    // The complete word is processed
+    else
+    {
+        // word is already present, increase the frequency
+        if ( (*root)->isEnd ) {
+            ++( (*root)->frequency );
+        }
+        else
+        {
+            (*root)->isEnd = 1;
+            (*root)->frequency = 1;
+        }
+
+        // Insert in min heap also
+        insertInMinHeap( minHeap, root, dupWord );
+    }
+
+}
+
+
+// add a word to Trie & min heap. A wrapper over the insertUtil
+void insertTrieAndHeap(const char *word,
+                       TrieNode** root,
+                       MinHeap* minHeap)
+{
+
+    insertUtil(root, minHeap, word, word);
+
+}
+
+// A utility function to show results, The min heap
+// contains k most frequent words so far, at any time
+void displayMinHeap( MinHeap* minHeap )
+{
+    int i;
+
+    // print top K word with frequency
+    for( i = 0; i < minHeap->count; ++i ) {
+        printf("%7d %s\n",
+               minHeap->array[i].frequency,
+               minHeap->array[i].word);
+    }
+}
 
 /**
  * @brief
@@ -64,19 +131,27 @@ count(FILE* ifp,
 {
 
     char buffer[4096];
-    int rc;
+    MinHeap* minHeap;
+    TrieNode* root;
+    int status;
 
-    rc = 0;
+    minHeap = createMinHeap(20);
+    root = NULL;
+
+    status = 0;
 
     while (fgets(buffer, sizeof(buffer), ifp)) {
-        fputs(buffer, ofp);
+        buffer[strlen(buffer)-1] = '\0';
+        insertTrieAndHeap(buffer, &root, minHeap);
     }
 
     if (ferror(ifp)) {
-        rc = -1;
+        status = -1;
     }
 
-    return (rc);
+    displayMinHeap(minHeap);
+
+    return (status);
 
 }
 
