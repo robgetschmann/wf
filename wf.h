@@ -1,5 +1,5 @@
 /**
- * @file heap.h
+ * @file wf.h
  *
  * @author Robert A. Getschmann <rob@getschmann.net>
  *
@@ -9,7 +9,7 @@
  *
  * ===========================================================================
  *
- * Copyright (c) 2018, Robert A. Getschmann <rob@getschmann.net>
+ * Copyright (c) 2017-2018, Robert A. Getschmann <rob@getschmann.net>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,51 +40,25 @@
  * ===========================================================================
  */
 
-#include <stdbool.h>
-#include <stdint.h>
-
-#include <trie.h>
-
 #pragma once
 
-/*
- * Forward Declarations.
- */
-typedef struct Heap Heap;
-typedef struct HeapNode HeapNode;
+#include <assert.h>
+#include <ctype.h>
+#include <errno.h>
+#include <fcntl.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
 
 /**
  *
  */
-enum {
-    MAX_WORD_SIZE = 30
-};
-
-/**
- *
- */
-struct Heap {
-    uint32_t count;
-    uint32_t size;
-    HeapNode* vector;
-};
-
-/**
- *
- */
-struct HeapNode {
-    TrieNode* node;
-    uint32_t frequency;
-    char* word;
-};
-
-Heap*
-heapNew(uint32_t size);
-
-void
-heapInsert(Heap* heap,
-           TrieNode** node,
-           const char* word);
+extern const uint32_t frequencyCount;
 
 /*
  * vim: cindent:cinoptions+={0,>1s,(0,t0,l1,^0:expandtab:smartindent:sw=4:ts=4:tw=0

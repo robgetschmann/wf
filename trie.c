@@ -40,21 +40,29 @@
  * ===========================================================================
  */
 
-#include <stdlib.h>
+#include <wf.h>
 
 #include <trie.h>
 
+/**
+ * @brief
+ * @details
+ * @param
+ * @return
+ */
 TrieNode*
-newTrieNode(void)
+trieNodeNew(void)
 {
 
-	TrieNode* trieNode = calloc(1, sizeof(TrieNode));
+	TrieNode* node;
 
-	trieNode->isEnd = 0;
-	trieNode->frequency = 0;
-	trieNode->indexMinHeap = -1;
+	node = calloc(1, sizeof(TrieNode));
 
-	return (trieNode);
+	node->complete = false;
+	node->frequency = 0;
+	node->index = -1;
+
+	return (node);
 
 }
 

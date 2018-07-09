@@ -40,127 +40,189 @@
  * ===========================================================================
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <unistd.h>
+#include <wf.h>
 
 #include <count.h>
 #include <squeeze.h>
 
+/**
+ *
+ */
+typedef struct Job Job;
+
+typedef void (JobFunc)(Job* job,
+                       int channel[2]);
+
+/**
+ *
+ */
+struct Job {
+    JobFunc* entry;
+    struct {
+        int input;
+        int output;
+    } fd;
+};
+
 /*
- * Forward Declarations.
+ * Forward Declarations
  */
-
-static int job_count(FILE* ifp, FILE* ofp);
-static int job_squeeze(FILE* ifp, FILE* ofp);
+static JobFunc jobCount;
+static JobFunc jobSqueeze;
 
 /**
  *
  */
-int
-job_count(FILE* ifp,
-          FILE* ofp)
+static Job jobVector[] = {
+    { jobSqueeze },
+    { jobCount },
+};
+
+/**
+ *
+ */
+const uint32_t frequencyCount = 20;
+
+/**
+ * @brief
+ * @details
+ * @param
+ * @return
+ */
+static void
+__attribute__ ((noreturn))
+jobCount(Job* job,
+         int channel[2])
 {
-    return (0);
+
+    close(channel[1]);
+
+    /* Read input from the pipe, and write out out to standard output. */
+    job->fd.input = dup2(channel[0], STDIN_FILENO);
+    job->fd.output = STDOUT_FILENO;
+
+    /* Open the input/output file descriptors as streams. */
+    FILE* ifp = fdopen(job->fd.input, "r");
+    assert(ifp);
+
+    FILE* ofp = fdopen(job->fd.output, "w");
+    assert(ofp);
+
+    exit(count(ifp, ofp));
+
 }
 
 /**
- *
+ * @brief
+ * @details
+ * @param
+ * @return
  */
-int
-job_squeeze(FILE* ifp,
-            FILE* ofp)
+static void
+__attribute__ ((noreturn))
+jobSqueeze(Job* job,
+           int channel[2])
 {
-    return (0);
+
+    close(channel[0]);
+
+    /* Read input from standard input, and write out out to the pipe. */
+    job->fd.input = STDIN_FILENO;
+    job->fd.output = dup2(channel[1], STDOUT_FILENO);
+
+    /* Open the input/output file descriptors as streams. */
+    FILE* ifp = fdopen(job->fd.input, "r");
+    assert(ifp);
+
+    FILE* ofp = fdopen(job->fd.output, "w");
+    assert(ofp);
+
+    exit(squeeze(ifp, ofp));
+
 }
 
 /**
- *
+ * @brief   Entry point for the "wf" program
+ * @details The main() function is the entry point for the "wf" program;  It
+ *          processes the command line arguments and spawns two child processes
+ *          for performing word frequency for an input stream;  The first child
+ *          process filters valid words;  The second child process performs the
+ *          frequency analysis
+ * @param   argc The command line argument count
+ * @param   argv The command line argument vector
+ * @return  0 - success, 1 - filtering process failed, 2 - frequency analysis
+ *          process failed, 3 - both failed
  */
 int
 main(int argc,
      char** argv)
 {
 
-    FILE* wf_ifp = stdin;
-    FILE* wf_ofp = stdout;
-
+    /* Process any command line arguments. */
     switch (argc) {
 
         default: {
-            exit (1);
+            assert(argc == 1 || argc == 2);
             break;
         }
+
+        /* No command line arguments provided. */
         case 1: {
+            /* Input in from standard input. */
             break;
         }
+
+        /* A single command line argument provided. */
         case 2: {
-            wf_ifp = fopen(argv[1], "r");
+            fclose(stdin);
+            stdin = fopen(argv[1], "r");
             break;
         }
 
     }
 
-    int comm[2];
-    int rc;
+    /* Create a pipe for IPC between the child processes. */
+    int channel[2];
+    assert(pipe(channel) != -1);
 
-    rc = pipe(comm);
+    for (uint32_t i = 0; i < 2; i++) {
 
-    if (-1 == rc) {
-    }
+        pid_t child;
 
-    pid_t child;
+        switch ((child = fork())) {
 
-    switch (child = fork()) {
-
-        /* Error */
-        case -1: {
-            break;
-        }
-
-        /* Child Process */
-        case 0: {
-
-            FILE* ifp, *ofp;
-            int rc;
-
-            close(comm[0]);
-
-            ifp = wf_ifp;
-            ofp = fdopen(comm[1], "w");
-
-            rc = squeeze(ifp, ofp);
-            fclose(ofp);
-
-            break;
-
-        }
-
-        /* Parent Process */
-        default: {
-
-            FILE* ifp, *ofp;
-            int status;
-
-            close(comm[1]);
-
-            ifp = fdopen(comm[0], "r");
-            ofp = stdout;
-
-            rc = count(ifp, ofp);
-
-            /* Wait for the child to terminate. */
-            waitpid(child, &status, 0);
-
-            break;
+            /* Error - fork() failed, abort. */
+            case -1: {
+                assert(child != -1);
+                break;
+            }
+            /* Parent - do nothing. */
+            default: {
+                break;
+            }
+            /* Child - jump to the job to be executed. */
+            case 0: {
+                jobVector[i].entry(&jobVector[i], channel);
+                break;
+            }
 
         }
 
     }
 
-    exit(rc);
+    /* The parent needs to close the pipe used only by the child processes. */
+    close(channel[0]);
+    close(channel[1]);
+
+    /* Wait for the child processes to terminate. */
+    for (uint32_t i = 0; i < 2; i++) {
+
+        pid_t child __attribute__ ((unused));
+        int status;
+
+        child = wait(&status);
+
+    }
 
 }
 

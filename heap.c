@@ -40,127 +40,175 @@
  * ===========================================================================
  */
 
-#include <stdlib.h>
-#include <string.h>
+#include <wf.h>
 
 #include <heap.h>
 
-MinHeap*
-createMinHeap( int capacity )
+/*
+ * Forward Delcarations.
+ */
+static void heapBuild(Heap* heap);
+static void heapPercolate(Heap* heap, uint32_t index);
+
+/**
+ * @brief
+ * @details
+ * @param
+ * @return
+ */
+static void
+heapBuild(Heap* heap)
 {
 
-	MinHeap* minHeap = calloc(1, sizeof(MinHeap));
+    int i, j;
 
-	minHeap->capacity = capacity;
-	minHeap->count = 0;
+    j = heap->count-1;
+    i = (j-1) / 2;
 
-	minHeap->array = calloc(minHeap->capacity, sizeof(MinHeapNode));
+    while (i >= 0) {
+        heapPercolate(heap, i--);
+    }
 
-	return minHeap;
+    return;
 
 }
 
-// A utility function to swap two min heap nodes. This function
-// is needed in minHeapify
+/**
+ * @brief
+ * @details
+ * @param
+ * @return
+ */
 void
-swapMinHeapNodes(MinHeapNode* a,
-                 MinHeapNode* b)
+heapInsert(Heap* heap,
+           TrieNode** node,
+           const char* word)
 {
-	MinHeapNode temp = *a;
-	*a = *b;
-	*b = temp;
+
+    // Case 1: the word is already present in heap
+    if ((*node)->index != -1) {
+
+        heap->vector[(*node)->index].frequency++;
+
+        heapPercolate(heap, (*node)->index);
+
+    }
+
+    // Case 2: Word is not present and heap is not full
+    else if (heap->count < heap->size) {
+
+        uint32_t count = heap->count;
+
+        heap->vector[count].frequency = (*node)->frequency;
+        heap->vector[count].word = calloc(strlen(word)+1, sizeof(char));
+
+        strcpy(heap->vector[count].word, word);
+
+        heap->vector[count].node = *node;
+        (*node)->index = heap->count;
+
+        heap->count++;
+
+        heapBuild(heap);
+
+    }
+
+    // Case 3: Word is not present and heap is full.And frequency of word
+    // is more than root.The root is the least frequent word in heap,
+    // replace root with new word
+    else if ((*node)->frequency > heap->vector[0].frequency) {
+
+        heap->vector[0].node->index = -1;
+        heap->vector[0].node = *node;
+        heap->vector[0].node->index = 0;
+        heap->vector[0].frequency = (*node)->frequency;
+
+        // delete previously allocated memoory and
+        free(heap->vector[0].word);
+        heap->vector[0].word = calloc(strlen(word)+1, sizeof(char));
+
+        strcpy(heap->vector[0].word, word);
+
+        heapPercolate(heap, 0);
+
+    }
+
+    return;
+
 }
 
-// This is the standard minHeapify function. It does one thing extra.
+/**
+ * @brief
+ * @details
+ * @param
+ * @return
+ */
+Heap*
+heapNew(uint32_t size)
+{
+
+    Heap* heap;
+
+    heap = calloc(1, sizeof(Heap));
+
+    heap->size = size;
+    heap->count = 0;
+
+    heap->vector = calloc(heap->size, sizeof(HeapNode));
+
+    return (heap);
+
+}
+
+// This is the standard heapify function.It does one thing extra.
 // It updates the minHapIndex in Trie when two nodes are swapped in
 // in min heap
-void minHeapify( MinHeap* minHeap, int idx )
+/**
+ * @brief
+ * @details
+ * @param
+ * @return
+ */
+static void
+heapPercolate(Heap* heap,
+              uint32_t index)
 {
-	int left, right, smallest;
 
-	left = 2 * idx + 1;
-	right = 2 * idx + 2;
-	smallest = idx;
-	if ( left < minHeap->count &&
-		minHeap->array[ left ]. frequency <
-		minHeap->array[ smallest ]. frequency
-	)
-		smallest = left;
+    uint32_t left = index*2 + 1;
+    uint32_t right = left + 1;
+    uint32_t smallest = index;
 
-	if ( right < minHeap->count &&
-		minHeap->array[ right ]. frequency <
-		minHeap->array[ smallest ]. frequency
-	)
-		smallest = right;
+    if (left < heap->count
+        && heap->vector[left].frequency < heap->vector[smallest].frequency)
+    {
+        smallest = left;
+    }
 
-	if( smallest != idx )
-	{
-		// Update the corresponding index in Trie node.
-		minHeap->array[ smallest ]. root->indexMinHeap = idx;
-		minHeap->array[ idx ]. root->indexMinHeap = smallest;
+    if (right < heap->count
+        && heap->vector[right].frequency < heap->vector[smallest].frequency)
+    {
+        smallest = right;
+    }
 
-		// Swap nodes in min heap
-		swapMinHeapNodes (&minHeap->array[ smallest ], &minHeap->array[ idx ]);
+    if (smallest != index) {
 
-		minHeapify( minHeap, smallest );
-	}
-}
+        HeapNode node;
 
-// A standard function to build a heap
-void buildMinHeap( MinHeap* minHeap )
-{
-	int n, i;
-	n = minHeap->count - 1;
+        // Update the corresponding index in Trie node.
+        heap->vector[smallest].node->index = index;
+        heap->vector[index].node->index = smallest;
 
-	for( i = ( n - 1 ) / 2; i >= 0; --i )
-		minHeapify( minHeap, i );
-}
+        // Swap the nodes.
+        node = heap->vector[smallest];
+        heap->vector[smallest] = heap->vector[index];
+        heap->vector[index] = node;
 
-// Inserts a word to heap, the function handles the 3 cases explained above
-void insertInMinHeap( MinHeap* minHeap, TrieNode** root, const char* word )
-{
-	// Case 1: the word is already present in minHeap
-	if( (*root)->indexMinHeap != -1 )
-	{
-		++( minHeap->array[ (*root)->indexMinHeap ]. frequency );
+        heapPercolate(heap, smallest);
 
-		// percolate down
-		minHeapify( minHeap, (*root)->indexMinHeap );
-	}
+    }
 
-	// Case 2: Word is not present and heap is not full
-	else if( minHeap->count < minHeap->capacity )
-	{
-		int count = minHeap->count;
-		minHeap->array[ count ]. frequency = (*root)->frequency;
-		minHeap->array[ count ]. word = calloc(strlen(word)+1, sizeof(char));
-		strcpy( minHeap->array[ count ]. word, word );
+    return;
 
-		minHeap->array[ count ]. root = *root;
-		(*root)->indexMinHeap = minHeap->count;
-
-		++( minHeap->count );
-		buildMinHeap( minHeap );
-	}
-
-	// Case 3: Word is not present and heap is full. And frequency of word
-	// is more than root. The root is the least frequent word in heap,
-	// replace root with new word
-	else if ( (*root)->frequency > minHeap->array[0]. frequency )
-	{
-
-		minHeap->array[ 0 ]. root->indexMinHeap = -1;
-		minHeap->array[ 0 ]. root = *root;
-		minHeap->array[ 0 ]. root->indexMinHeap = 0;
-		minHeap->array[ 0 ]. frequency = (*root)->frequency;
-
-		// delete previously allocated memoory and
-		free(minHeap->array[ 0 ].word);
-		minHeap->array[ 0 ]. word = calloc(strlen(word)+1, sizeof(char));
-		strcpy( minHeap->array[ 0 ]. word, word );
-
-		minHeapify ( minHeap, 0 );
-	}
 }
 
 /*

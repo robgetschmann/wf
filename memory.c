@@ -1,5 +1,5 @@
 /**
- * @file heap.h
+ * @file memory.c
  *
  * @author Robert A. Getschmann <rob@getschmann.net>
  *
@@ -7,11 +7,10 @@
  *
  * @section LICENSE
  *
- * ===========================================================================
- *
- * Copyright (c) 2018, Robert A. Getschmann <rob@getschmann.net>
+ * ==============================
+ * Copyright (c) 2017-2018, Robert A. Getschmann <rob@getschmann.net>
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright
@@ -25,7 +24,7 @@
  * 4. Neither the name of the <organization> nor the
  *    names of its contributors may be used to endorse or promote products
  *    derived from this software without specific prior written permission.
- *
+ * 
  * THIS SOFTWARE IS PROVIDED BY <COPYRIGHT HOLDER> ''AS IS'' AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -36,55 +35,84 @@
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * ===========================================================================
+ * ==============================
  */
 
-#include <stdbool.h>
-#include <stdint.h>
-
-#include <trie.h>
-
-#pragma once
+#include <wf.h>
 
 /*
- * Forward Declarations.
+ * External function declarations.
+ *
+ * C Standard Library memory functions.
  */
-typedef struct Heap Heap;
-typedef struct HeapNode HeapNode;
+extern void* __real_calloc(size_t nmemb, size_t size);
+extern void* __real_malloc(size_t size);
+extern void* __real_realloc(void* memory, size_t size);
 
 /**
- *
+ * @brief
+ * @details
+ * @param
+ * @return A pointer to the memory allocated or NULL
  */
-enum {
-    MAX_WORD_SIZE = 30
-};
+void*
+__attribute__ ((malloc))
+__wrap_calloc(size_t nmemb,
+              size_t size)
+{
+
+    void* m;
+
+    m = __real_calloc(nmemb, size);
+    assert(m);
+
+    return (m);
+
+}
 
 /**
+ * @brief
  *
+ * @details
+ *
+ * @param
+ *
+ * @return A pointer to the memory allocated or NULL
  */
-struct Heap {
-    uint32_t count;
-    uint32_t size;
-    HeapNode* vector;
-};
+void*
+__attribute__ ((malloc))
+__wrap_malloc(size_t size)
+{
+
+    void* m;
+
+    m = __real_malloc(size);
+    assert(m);
+
+    return (m);
+
+}
 
 /**
- *
+ * @brief
+ * @details
+ * @param
+ * @return A pointer to the memory reallocated or NULL
  */
-struct HeapNode {
-    TrieNode* node;
-    uint32_t frequency;
-    char* word;
-};
+void*
+__attribute__ ((malloc))
+__wrap_realloc(void* memory,
+               size_t size)
+{
 
-Heap*
-heapNew(uint32_t size);
+    void* m;
 
-void
-heapInsert(Heap* heap,
-           TrieNode** node,
-           const char* word);
+    m = __real_realloc(memory, size);
+    assert(m);
+
+    return (m);
+
+}
 
 /*
  * vim: cindent:cinoptions+={0,>1s,(0,t0,l1,^0:expandtab:smartindent:sw=4:ts=4:tw=0

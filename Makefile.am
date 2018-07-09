@@ -1,5 +1,7 @@
 #AM_CFLAGS = -Wall -Werror -Wextra
-AM_CFLAGS =
+AM_CFLAGS = -Wall
+
+AM_LDFLAGS = -Wl,-wrap,calloc,-wrap,malloc,-wrap,realloc
 
 CLEANFILES = \
 	wf.core \
@@ -17,6 +19,7 @@ wf_SOURCES = \
 	count.h \
 	heap.c \
 	heap.h \
+	memory.c \
 	squeeze.c \
 	squeeze.h \
 	trie.c \

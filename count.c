@@ -40,11 +40,7 @@
  * ===========================================================================
  */
 
-#include <ctype.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <wf.h>
 
 #include <count.h>
 #include <heap.h>
@@ -53,71 +49,8 @@
 /*
  * Forward Declarations.
  */
-static int __attribute__ ((unused))
-    count_main(int argc, char** argv);
-
-    // Inserts a new word to both Trie and Heap
-void insertUtil(TrieNode** root,
-                MinHeap* minHeap,
-                const char* word,
-                const char* dupWord)
-{
-
-    // Base Case
-    if (*root == NULL) {
-        *root = newTrieNode();
-    }
-
-    // There are still more characters in word
-    if (*word != '\0' ) {
-        insertUtil(&((*root)->child[tolower(*word ) - 97]),
-                   minHeap,
-                   word + 1,dupWord);
-    }
-
-    // The complete word is processed
-    else
-    {
-        // word is already present, increase the frequency
-        if ( (*root)->isEnd ) {
-            ++( (*root)->frequency );
-        }
-        else
-        {
-            (*root)->isEnd = 1;
-            (*root)->frequency = 1;
-        }
-
-        // Insert in min heap also
-        insertInMinHeap( minHeap, root, dupWord );
-    }
-
-}
-
-
-// add a word to Trie & min heap. A wrapper over the insertUtil
-void insertTrieAndHeap(const char *word,
-                       TrieNode** root,
-                       MinHeap* minHeap)
-{
-
-    insertUtil(root, minHeap, word, word);
-
-}
-
-// A utility function to show results, The min heap
-// contains k most frequent words so far, at any time
-void displayMinHeap( MinHeap* minHeap )
-{
-    int i;
-
-    // print top K word with frequency
-    for( i = 0; i < minHeap->count; ++i ) {
-        printf("%7d %s\n",
-               minHeap->array[i].frequency,
-               minHeap->array[i].word);
-    }
-}
+static int insert(TrieNode** root, Heap* heap, const char* word, const char* dupWord);
+static int dump(Heap* heap, FILE* fp);
 
 /**
  * @brief
@@ -130,43 +63,103 @@ count(FILE* ifp,
       FILE* ofp)
 {
 
-    char buffer[4096];
-    MinHeap* minHeap;
-    TrieNode* root;
-    int status;
+    Heap* heap = heapNew(frequencyCount);
+    TrieNode* root = NULL;
+    int status = 0;
 
-    minHeap = createMinHeap(20);
-    root = NULL;
-
-    status = 0;
-
-    while (fgets(buffer, sizeof(buffer), ifp)) {
+    for (char buffer[4096]; fgets(buffer, sizeof(buffer), ifp); ) {
         buffer[strlen(buffer)-1] = '\0';
-        insertTrieAndHeap(buffer, &root, minHeap);
+        insert(&root, heap, buffer, buffer);
     }
 
-    if (ferror(ifp)) {
+    /* End of input reached, flush the output stream. */
+    if (feof(ifp)) {
+        status = 0;
+    }
+    /* An input error occurred, fail the function. */
+    else if (ferror(ifp)) {
         status = -1;
     }
 
-    displayMinHeap(minHeap);
+    dump(heap, ofp);
+
+    fclose(ifp);
+    fclose(ofp);
 
     return (status);
 
 }
 
 /**
+ * @brief Inserts a new word to both Trie and Heap
+ * @details
+ * @param
+ * @return
+ */
+static int
+insert(TrieNode** root,
+       Heap* heap,
+       const char* word,
+       const char* dupWord)
+{
+
+    // Base Case
+    if (!*root) {
+
+        *root = trieNodeNew();
+
+    }
+
+    // There are still more characters in word
+    if (*word != '\0') {
+
+        insert(&(*root)->child[tolower(*word) - 'a'],
+               heap,
+               word+1,
+               dupWord);
+
+    }
+
+    // The complete word is processed
+    else {
+
+        // word is already present, increase the frequency
+        if ((*root)->complete == true) {
+            (*root)->frequency++;
+        }
+        else {
+            (*root)->complete = true;
+            (*root)->frequency = 1;
+        }
+
+        // Insert in min heap also
+        heapInsert(heap, root, dupWord);
+
+    }
+
+    return (0);
+
+}
+
+/**
+ *
  * @brief
  * @details
  * @param
  * @return
  */
 static int
-count_main(int argc,
-           char** argv)
+dump(Heap* heap,
+     FILE* fp)
 {
 
-    exit(count(stdin, stdout));
+    for (uint32_t i = 0; i < heap->count; i++) {
+        fprintf(fp, "%7d %s\n",
+                heap->vector[i].frequency,
+                heap->vector[i].word);
+    }
+
+    return (0);
 
 }
 

@@ -53,14 +53,15 @@ typedef struct TrieNode TrieNode;
 
 struct TrieNode {
 
-    bool isEnd;
+    bool complete;
     uint32_t frequency;
-    int indexMinHeap;
+    uint32_t index;
+
     TrieNode* child[MAXIMUM_CHARACTERS];
 
 };
 
-TrieNode* newTrieNode(void);
+TrieNode* trieNodeNew(void);
 
 /*
  * vim: cindent:cinoptions+={0,>1s,(0,t0,l1,^0:expandtab:smartindent:sw=4:ts=4:tw=0

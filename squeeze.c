@@ -40,15 +40,9 @@
  * ===========================================================================
  */
 
-#include <ctype.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <wf.h>
 
 #include <squeeze.h>
-
-static int __attribute__ ((unused))
-squeeze_main(int argc, char** argv);
 
 /**
  * @brief
@@ -62,19 +56,16 @@ squeeze(FILE* ifp,
 {
 
     char buffer[4096];
-    bool squeezing;
-    int length;
-    char byte;
-    int read_count;
-    int status;
-
     setvbuf(ofp, buffer, _IOLBF, sizeof(buffer));
-    squeezing = false;
-    read_count = 0;
-    status = 0;;
-    length = 0;
 
-    while (read_count = fread(&byte, 1, 1, ifp)) {
+    bool squeezing = false;
+    char byte = '\0';
+    int length = 0;
+    int read_count = 0;
+    int status = 0;;
+
+    while ((read_count = fread(&byte, 1, 1, ifp))) {
+
 
         if (isalpha(byte)) {
             fputc(tolower(byte), ofp);
@@ -91,7 +82,6 @@ squeeze(FILE* ifp,
 
     /* End of input reached, flush the output stream. */
     if (feof(ifp)) {
-        fflush(ofp);
         status = 0;
     }
     /* An input error occurred, fail the function. */
@@ -99,22 +89,10 @@ squeeze(FILE* ifp,
         status = -1;
     }
 
+    fclose(ifp);
+    fclose(ofp);
+
     return (status);
-
-}
-
-/**
- * @brief
- * @details
- * @param
- * @return
- */
-static int
-squeeze_main(int argc,
-             char** argv)
-{
-
-    exit(squeeze(stdin, stdout));
 
 }
 
