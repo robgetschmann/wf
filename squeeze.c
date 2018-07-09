@@ -97,11 +97,11 @@ squeeze(FILE* ifp,
 
     }
 
-    /* End of input reached, flush the output stream. */
+    /* End of input reached, report success. */
     if (feof(ifp)) {
         status = 0;
     }
-    /* An input error occurred, fail the function. */
+    /* An input error occurred, report failure. */
     else if (ferror(ifp)) {
         status = -1;
     }

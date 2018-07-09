@@ -51,12 +51,15 @@
 /*
  * Forward declarations
  */
-static int dump(Heap* heap, FILE* fp);
+static int
+dump(Heap* heap,
+     FILE* fp);
 
-static int insert(TrieNode** root,
-                  Heap* heap,
-                  const char* word,
-                  const char* original);
+static int
+insert(TrieNode** root,
+       Heap* heap,
+       const char* word,
+       const char* original);
 
 /**
  * @brief   Process a stream of words and determine each word's frequency
@@ -83,11 +86,11 @@ count(FILE* ifp,
         insert(&root, heap, buffer, buffer);
     }
 
-    /* End of input reached, flush the output stream. */
+    /* End of input reached, report success. */
     if (feof(ifp)) {
         status = 0;
     }
-    /* An input error occurred, fail the function. */
+    /* An input error occurred, report failure. */
     else if (ferror(ifp)) {
         status = -1;
     }
@@ -120,7 +123,7 @@ dump(Heap* heap,
 {
 
     for (uint32_t i = 0; i < heap->count; i++) {
-        fprintf(ofp, "%7d %s\n",
+        fprintf(ofp, "%d %s\n",
                 heap->vector[i].frequency,
                 heap->vector[i].word);
     }

@@ -56,18 +56,18 @@ typedef struct HeapNode HeapNode;
  * @brief   Object representing a Sorted Heap
  */
 struct Heap {
-    uint32_t count;
-    uint32_t size;
-    HeapNode* vector;
+    uint32_t count;     /* number of nodes within the heap */
+    uint32_t size;      /* maximum size of the heap */
+    HeapNode* vector;   /* dynamically allocated vector of heap nodes */
 };
 
 /**
  * @brief   Object representing a Sorted Heap Node
  */
 struct HeapNode {
-    TrieNode* node;
-    uint32_t frequency;
-    char* word;
+    TrieNode* node;     /* pointer to associate trie and heap node */
+    uint32_t frequency; /* word frequency */
+    char* word;         /* dynamically allocatd null terminated word string */
 };
 
 /**

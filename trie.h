@@ -44,11 +44,10 @@
 
 #pragma once
 
-/**
- *
- */
 enum {
-    CHILD_NODE_COUNT = 26
+
+    TRIE_CHILD_NODE_COUNT = 26              /* maximum Trie child nodes */
+
 };
 
 typedef struct TrieNode TrieNode;
@@ -58,11 +57,11 @@ typedef struct TrieNode TrieNode;
  */
 struct TrieNode {
 
-    bool complete;
-    uint32_t frequency;
-    int32_t index;
+    bool complete;                          /** termination reached */
+    uint32_t frequency;                     /** word frequency */
+    int32_t index;                          /** word index in heap */
 
-    TrieNode* child[CHILD_NODE_COUNT];
+    TrieNode* child[TRIE_CHILD_NODE_COUNT]; /* node children */
 
 };
 
