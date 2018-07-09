@@ -77,7 +77,7 @@ count(FILE* ifp,
     TrieNode* root = NULL;
     int status = 0;
 
-    while (getline(&buffer, &buffer_size, ifp) != -1) {
+    while (getdelim(&buffer, &buffer_size, '\n', ifp) != -1) {
         /* Eat the newline. */
         buffer[strlen(buffer)-1] = '\0';
         insert(&root, heap, buffer, buffer);

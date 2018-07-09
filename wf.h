@@ -44,8 +44,6 @@
 
 #pragma once
 
-#define _WITH_GETLINE
-
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
