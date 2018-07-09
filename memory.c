@@ -5,7 +5,7 @@
  *
  * @section DESCRIPTION
  *
- * Implementation module for ...
+ * Implementation module for memory wrapper functions
  *
  * Provide a wrapper for calloc, malloc, and realloc.  The wrapper function
  * calls the C library version.  If memory allocation fails the wrapper will

@@ -5,6 +5,8 @@
  *
  * @section DESCRIPTION
  *
+ * Implementation module for character "squeeze" (filtering) functionality
+ *
  * @section LICENSE
  *
  * ===========================================================================

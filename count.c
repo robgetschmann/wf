@@ -5,7 +5,7 @@
  *
  * @section DESCRIPTION
  *
- * Implementation module for ...
+ * Implementation module for character "count" (frequency) functionality
  *
  * @section LICENSE
  *
@@ -49,7 +49,7 @@
 #include <trie.h>
 
 /*
- * Forward Declarations
+ * Forward declarations
  */
 static int dump(Heap* heap, FILE* fp);
 
@@ -59,7 +59,7 @@ static int insert(TrieNode** root,
                   const char* original);
 
 /**
- * @brief
+ * @brief   Process a stream of words and determine each word's frequency
  * @details
  * @param   ifp the input stream containing newline delimited valid words
  * @param   ofp the output stream for the frequency count and word display
@@ -95,7 +95,10 @@ count(FILE* ifp,
     /* Display the frequency of the top word counts. */
     dump(heap, ofp);
 
-    free(buffer);
+    /* Free the buffer allocated by getdelim(). */
+    if (buffer) {
+        free(buffer);
+    }
 
     return (status);
 
@@ -103,7 +106,10 @@ count(FILE* ifp,
 
 /**
  * @brief   Display the top frequency counts and the corresponding word
- * @details
+ * @details Display the top frequency counts; The first column contains
+ *          the count and the second column contains the corresponding word;
+ *          Each line is a record and the records are sorted in reverse
+ *          numerical order based on the frequency count
  * @param   heap the heap containing the top frequency counts and word
  * @param   ofp the output file stream
  * @return  0 - success, -1 - failure
@@ -124,9 +130,13 @@ dump(Heap* heap,
 }
 
 /**
- * @brief
+ * @brief   Insert a word into a Trie and prioritize it in the corresponding
+ *          heap
  * @details
- * @param
+ * @param   root Trie head
+ * @param   heap Heap for most frequent words in Trie
+ * @param   word pointer to current character in word being inserted
+ * @param   original pointer to original word being inserted
  * @return  0 - success, -1 - failure
  */
 static int

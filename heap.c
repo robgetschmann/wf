@@ -47,7 +47,7 @@
 #include <heap.h>
 
 /*
- * Forward Declarations
+ * Forward declarations
  */
 static void heapBuild(Heap* heap);
 static void heapPercolate(Heap* heap, uint32_t index);

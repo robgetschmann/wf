@@ -5,9 +5,14 @@
  *
  * @section DESCRIPTION
  *
- * Entry point for the word frequency (wf) program.  This modules coordinates
+ * Entry point for the word frequency (wf) program; This module coordinates
  * the child processes which perform filting of the input as wel as the word
- * frequency analysis.
+ * frequency analysis
+ *
+ * Any catastrophic error conditions are handled by calling assert() and
+ * terminating the process;  In these situations memory will not be freed
+ * and file descriptors will not be closed; This is acceptable since the
+ * operating system will clean up upon process termination
  *
  * @section LICENSE
  *
@@ -50,21 +55,21 @@
 #include <squeeze.h>
 
 /*
- * Forward Declarations
+ * Forward declarations
  */
 typedef struct Job Job;
 
 /**
  * @brief   Word frequency job function entry point prototype
  */
-typedef void (JobFunc)(Job* job,
-                       int channel[2]);
+typedef void (JobFunc)(Job* job);
 
 /**
  * @brief   Object for maintaining a child process "job" configurables
  */
 struct Job {
     JobFunc* entry;
+    int channel[2];
     struct {
         int input;
         int output;
@@ -72,7 +77,7 @@ struct Job {
 };
 
 /*
- * Forward Declarations
+ * Forward declarations
  */
 static JobFunc jobCount;
 static JobFunc jobSqueeze;
@@ -81,8 +86,8 @@ static JobFunc jobSqueeze;
  * @brief   Vector of the jobs for processing the text word frequencies
  */
 static Job jobVector[] = {
-    { jobSqueeze,   { -1, -1 } },
-    { jobCount,     { -1, -1 } },
+    { jobSqueeze,   { -1, -1},  { -1, -1 } },
+    { jobCount,     { -1, -1},  { -1, -1 } },
 };
 
 /**
@@ -103,15 +108,14 @@ const uint32_t frequencyCount = 20;
  */
 static void
 __attribute__ ((noreturn))
-jobCount(Job* job,
-         int channel[2])
+jobCount(Job* job)
 {
 
     /* The count job read from the pipe input only, close the output. */
-    close(channel[1]);
+    close(job->channel[1]);
 
     /* Read input from the pipe, and write out out to standard output. */
-    job->fd.input = dup2(channel[0], STDIN_FILENO);
+    job->fd.input = dup2(job->channel[0], STDIN_FILENO);
     job->fd.output = STDOUT_FILENO;
 
     /* Open the input/output file descriptors as streams. */
@@ -137,16 +141,15 @@ jobCount(Job* job,
  */
 static void
 __attribute__ ((noreturn))
-jobSqueeze(Job* job,
-           int channel[2])
+jobSqueeze(Job* job)
 {
 
     /* The squeeze job writes to the pipe output only, close the input. */
-    close(channel[0]);
+    close(job->channel[0]);
 
     /* Read input from standard input, and write out out to the pipe. */
     job->fd.input = STDIN_FILENO;
-    job->fd.output = dup2(channel[1], STDOUT_FILENO);
+    job->fd.output = dup2(job->channel[1], STDOUT_FILENO);
 
     /* Open the input/output file descriptors as streams. */
     FILE* ifp = fdopen(job->fd.input, "r");
@@ -207,12 +210,19 @@ main(int argc,
 
     }
 
-    /* Create a pipe for IPC between the child processes. */
+    /*
+     * Create a pipe for IPC between the child processes.  Copy
+     * the channel object into each of the jobs for pipeline setup.
+     */
     int channel[2];
     assert(pipe(channel) != -1);
 
+    memcpy(jobVector[0].channel, channel, sizeof(channel));
+    memcpy(jobVector[1].channel, channel, sizeof(channel));
+
     uint32_t jobSpawned = 0;
 
+    /* Create a child process for the squeeze and count jobs. */
     for (uint32_t i = 0; i < jobMax; i++) {
 
         pid_t child;
@@ -233,7 +243,7 @@ main(int argc,
 
             /* Child - jump to the job to be executed. */
             case 0: {
-                jobVector[i].entry(&jobVector[i], channel);
+                jobVector[i].entry(&jobVector[i]);
                 break;
             }
 
@@ -241,10 +251,7 @@ main(int argc,
 
     }
 
-    /*
-     * The parent needs to close the pipe which is used only by the child
-     * processes.
-     */
+    /* The parent does not do IPC with the child processes, close the pipe. */
     close(channel[0]);
     close(channel[1]);
 
