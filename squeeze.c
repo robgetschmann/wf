@@ -40,21 +40,24 @@
  * ===========================================================================
  */
 
+#include <squeeze.h>
 #include <wf.h>
 
-#include <squeeze.h>
-
 /**
- * @brief
- * @details
- * @param
- * @return
+ * @brief   Filter input within the character class [a-zA-Z]
+ * @details Filter the input stream to remove characters not in the class
+ *          [a-zA-Z]; Words ([a-zA-Z]) will be output to the oufput file
+ *          stream and delimited by a newline character.
+ * @param   ifp input stream file pointer
+ * @param   ofp output stream file pointer
+ * @return  0 - success, -1 - failure
  */
 int
 squeeze(FILE* ifp,
         FILE* ofp)
 {
 
+    /* Output will be fully buffered. */
     char buffer[4096];
     setvbuf(ofp, buffer, _IOLBF, sizeof(buffer));
 
@@ -62,16 +65,27 @@ squeeze(FILE* ifp,
     char byte = '\0';
     int length = 0;
     int read_count = 0;
-    int status = 0;;
+    int status = 0;
 
+    /*
+     * Process a byte at a time from the input stream.
+     *
+     * All upper case characters in the class [a-zA-Z] are converted to
+     * the lower case equivalent.
+     *
+     * A newline character delimts words in the output stream.
+     *
+     * The squeezing Boolean is true when multiple contiguous characters
+     * NOT in the class [a-zA-Z] are being processed.
+     */
     while ((read_count = fread(&byte, 1, 1, ifp))) {
-
 
         if (isalpha(byte)) {
             fputc(tolower(byte), ofp);
             length++;
             squeezing = false;
         }
+
         else if (length != 0 && squeezing == false) {
             fputc('\n', ofp);
             length = 0;
@@ -88,9 +102,6 @@ squeeze(FILE* ifp,
     else if (ferror(ifp)) {
         status = -1;
     }
-
-    fclose(ifp);
-    fclose(ofp);
 
     return (status);
 

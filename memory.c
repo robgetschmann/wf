@@ -5,6 +5,10 @@
  *
  * @section DESCRIPTION
  *
+ * Provide a wrapper for calloc, malloc, and realloc.  The wrapper function
+ * calls the C library version.  If memory allocation fails the wrapper will
+ * invoke and assert() to terminate the process.
+ *
  * @section LICENSE
  *
  * ==============================
@@ -50,10 +54,10 @@ extern void* __real_malloc(size_t size);
 extern void* __real_realloc(void* memory, size_t size);
 
 /**
- * @brief
+ * @brief   Wrapper for C library calloc()
  * @details
- * @param
- * @return A pointer to the memory allocated or NULL
+ * @param   Same parameters as C library calloc()
+ * @return  A pointer to the memory allocated or NULL
  */
 void*
 __attribute__ ((malloc))
@@ -71,13 +75,10 @@ __wrap_calloc(size_t nmemb,
 }
 
 /**
- * @brief
- *
+ * @brief   Wrapper for C library malloc()
  * @details
- *
- * @param
- *
- * @return A pointer to the memory allocated or NULL
+ * @param   Same parameters as C library malloc()
+ * @return  A pointer to the memory allocated or NULL
  */
 void*
 __attribute__ ((malloc))
@@ -94,10 +95,10 @@ __wrap_malloc(size_t size)
 }
 
 /**
- * @brief
+ * @brief   Wrapper for C library realloc()
  * @details
- * @param
- * @return A pointer to the memory reallocated or NULL
+ * @param   Same parameters as C library realloc()
+ * @return  A pointer to the memory reallocated or NULL
  */
 void*
 __attribute__ ((malloc))

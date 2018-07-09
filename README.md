@@ -11,6 +11,9 @@ command line arguments are provided the program input is taken from the
 _standard input_ stream.  If one command line argument is provided this
 must be a readable file, the contents of which will be used as the input.
 
+* Any data input must be successfully processed even if it is not ASCII
+data.
+
 * The word frequency output will be to the _standard output_ stream.
 
 * Each record of output will be on a single line.  The first field of

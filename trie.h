@@ -55,7 +55,7 @@ struct TrieNode {
 
     bool complete;
     uint32_t frequency;
-    uint32_t index;
+    int32_t index;
 
     TrieNode* child[MAXIMUM_CHARACTERS];
 

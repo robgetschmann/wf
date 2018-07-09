@@ -40,23 +40,27 @@
  * ===========================================================================
  */
 
-#include <wf.h>
-
 #include <count.h>
 #include <heap.h>
 #include <trie.h>
+#include <wf.h>
 
 /*
- * Forward Declarations.
+ * Forward Declarations
  */
-static int insert(TrieNode** root, Heap* heap, const char* word, const char* dupWord);
 static int dump(Heap* heap, FILE* fp);
+
+static int insert(TrieNode** root,
+                  Heap* heap,
+                  const char* word,
+                  const char* original);
 
 /**
  * @brief
  * @details
- * @param
- * @return
+ * @param   ifp the input stream containing newline delimited valid words
+ * @param   ofp the output stream for the frequency count and word display
+ * @return  0 - success, -1 - failure
  */
 int
 count(FILE* ifp,
@@ -81,46 +85,63 @@ count(FILE* ifp,
         status = -1;
     }
 
+    /* Display the frequency of the top word counts. */
     dump(heap, ofp);
-
-    fclose(ifp);
-    fclose(ofp);
 
     return (status);
 
 }
 
 /**
- * @brief Inserts a new word to both Trie and Heap
+ * @brief   Display the top frequency counts and the corresponding word
+ * @details
+ * @param   heap the heap containing the top frequency counts and word
+ * @param   ofp the output file stream
+ * @return  0 - success, -1 - failure
+ */
+static int
+dump(Heap* heap,
+     FILE* ofp)
+{
+
+    for (uint32_t i = 0; i < heap->count; i++) {
+        fprintf(ofp, "%7d %s\n",
+                heap->vector[i].frequency,
+                heap->vector[i].word);
+    }
+
+    return (0);
+
+}
+
+/**
+ * @brief
  * @details
  * @param
- * @return
+ * @return  0 - success, -1 - failure
  */
 static int
 insert(TrieNode** root,
        Heap* heap,
        const char* word,
-       const char* dupWord)
+       const char* original)
 {
 
-    // Base Case
     if (!*root) {
 
         *root = trieNodeNew();
 
     }
 
-    // There are still more characters in word
     if (*word != '\0') {
 
         insert(&(*root)->child[tolower(*word) - 'a'],
                heap,
                word+1,
-               dupWord);
+               original);
 
     }
 
-    // The complete word is processed
     else {
 
         // word is already present, increase the frequency
@@ -133,30 +154,8 @@ insert(TrieNode** root,
         }
 
         // Insert in min heap also
-        heapInsert(heap, root, dupWord);
+        heapInsert(heap, root, original);
 
-    }
-
-    return (0);
-
-}
-
-/**
- *
- * @brief
- * @details
- * @param
- * @return
- */
-static int
-dump(Heap* heap,
-     FILE* fp)
-{
-
-    for (uint32_t i = 0; i < heap->count; i++) {
-        fprintf(fp, "%7d %s\n",
-                heap->vector[i].frequency,
-                heap->vector[i].word);
     }
 
     return (0);

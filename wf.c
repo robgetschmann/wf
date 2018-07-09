@@ -5,6 +5,10 @@
  *
  * @section DESCRIPTION
  *
+ * Entry point for the word frequency (wf) program.  This modules coordinates
+ * the child processes which perform filting of the input as wel as the word
+ * frequency analysis.
+ *
  * @section LICENSE
  *
  * ===========================================================================
@@ -40,21 +44,23 @@
  * ===========================================================================
  */
 
-#include <wf.h>
-
 #include <count.h>
 #include <squeeze.h>
+#include <wf.h>
 
-/**
- *
+/*
+ * Forward Declarations
  */
 typedef struct Job Job;
 
+/**
+ * @brief   Word frequency job function entry point prototype
+ */
 typedef void (JobFunc)(Job* job,
                        int channel[2]);
 
 /**
- *
+ * @brief   Object for maintaining a child process "job" configurables
  */
 struct Job {
     JobFunc* entry;
@@ -71,23 +77,28 @@ static JobFunc jobCount;
 static JobFunc jobSqueeze;
 
 /**
- *
+ * @brief   Vector of the jobs for processing the text word frequencies
  */
 static Job jobVector[] = {
-    { jobSqueeze },
-    { jobCount },
+    { jobSqueeze,   { -1, -1 } },
+    { jobCount,     { -1, -1 } },
 };
 
 /**
- *
+ * @brief   The count of the number of jobs supported
+ */
+static uint32_t jobMax = sizeof(jobVector) / sizeof(jobVector[0]);
+
+/**
+ * @brief   The top frequency counts to be displayed - Global
  */
 const uint32_t frequencyCount = 20;
 
 /**
- * @brief
+ * @brief   Entry point for the word frequency count job
  * @details
  * @param
- * @return
+ * @return  None
  */
 static void
 __attribute__ ((noreturn))
@@ -95,6 +106,7 @@ jobCount(Job* job,
          int channel[2])
 {
 
+    /* The count job read from the pipe input only, close the output. */
     close(channel[1]);
 
     /* Read input from the pipe, and write out out to standard output. */
@@ -104,19 +116,23 @@ jobCount(Job* job,
     /* Open the input/output file descriptors as streams. */
     FILE* ifp = fdopen(job->fd.input, "r");
     assert(ifp);
-
     FILE* ofp = fdopen(job->fd.output, "w");
     assert(ofp);
 
+    /*
+     * Exit the child process with the return status from count().
+     * Upon exiting the child process the input and output file streams
+     * will be closed indicated EOF to any readers.
+     */
     exit(count(ifp, ofp));
 
 }
 
 /**
- * @brief
+ * @brief   Entry point for the input filtering job
  * @details
  * @param
- * @return
+ * @return  None
  */
 static void
 __attribute__ ((noreturn))
@@ -124,6 +140,7 @@ jobSqueeze(Job* job,
            int channel[2])
 {
 
+    /* The squeeze job writes to the pipe output only, close the input. */
     close(channel[0]);
 
     /* Read input from standard input, and write out out to the pipe. */
@@ -133,10 +150,14 @@ jobSqueeze(Job* job,
     /* Open the input/output file descriptors as streams. */
     FILE* ifp = fdopen(job->fd.input, "r");
     assert(ifp);
-
     FILE* ofp = fdopen(job->fd.output, "w");
     assert(ofp);
 
+    /*
+     * Exit the child process with the return status from squeeze().
+     * Upon exiting the child process the input and output file streams
+     * will be closed indicated EOF to any readers.
+     */
     exit(squeeze(ifp, ofp));
 
 }
@@ -152,15 +173,19 @@ jobSqueeze(Job* job,
  * @param   argv The command line argument vector
  * @return  0 - success, 1 - filtering process failed, 2 - frequency analysis
  *          process failed, 3 - both failed
+ * @todo    Improve handling of wait() child status processing
  */
 int
 main(int argc,
      char** argv)
 {
 
+    int status = 0;
+
     /* Process any command line arguments. */
     switch (argc) {
 
+        /* Error - zero or one command line argument only! */
         default: {
             assert(argc == 1 || argc == 2);
             break;
@@ -185,7 +210,9 @@ main(int argc,
     int channel[2];
     assert(pipe(channel) != -1);
 
-    for (uint32_t i = 0; i < 2; i++) {
+    uint32_t jobSpawned = 0;
+
+    for (uint32_t i = 0; i < jobMax; i++) {
 
         pid_t child;
 
@@ -196,10 +223,13 @@ main(int argc,
                 assert(child != -1);
                 break;
             }
+
             /* Parent - do nothing. */
             default: {
+                jobSpawned++;
                 break;
             }
+
             /* Child - jump to the job to be executed. */
             case 0: {
                 jobVector[i].entry(&jobVector[i], channel);
@@ -210,19 +240,34 @@ main(int argc,
 
     }
 
-    /* The parent needs to close the pipe used only by the child processes. */
+    /*
+     * The parent needs to close the pipe which is used only by the child
+     * processes.
+     */
     close(channel[0]);
     close(channel[1]);
 
     /* Wait for the child processes to terminate. */
-    for (uint32_t i = 0; i < 2; i++) {
+    for (uint32_t i = 0; i < jobSpawned; i++) {
 
         pid_t child __attribute__ ((unused));
-        int status;
+        int child_status;
 
-        child = wait(&status);
+        child = wait(&child_status);
+        
+        if (WIFEXITED(child_status)) {
+            status += WEXITSTATUS(status);
+        }
 
     }
+
+    /*
+     * Since this is a filter the memory is used for the complete run of the
+     * program.  Memory for the various structures won't be free.  Instead the
+     * operating system will clean up upon process termination.
+     */
+
+    exit(0);
 
 }
 

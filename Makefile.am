@@ -1,5 +1,4 @@
-#AM_CFLAGS = -Wall -Werror -Wextra
-AM_CFLAGS = -Wall
+AM_CFLAGS = -Wall -Werror -Wextra
 
 AM_LDFLAGS = -Wl,-wrap,calloc,-wrap,malloc,-wrap,realloc
 

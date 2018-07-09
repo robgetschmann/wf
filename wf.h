@@ -5,6 +5,8 @@
  *
  * @section DESCRIPTION
  *
+ * Meta file to include C library header files and program globals
+ *
  * @section LICENSE
  *
  * ===========================================================================

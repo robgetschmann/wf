@@ -275,9 +275,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-
-#AM_CFLAGS = -Wall -Werror -Wextra
-AM_CFLAGS = -Wall
+AM_CFLAGS = -Wall -Werror -Wextra
 AM_LDFLAGS = -Wl,-wrap,calloc,-wrap,malloc,-wrap,realloc
 CLEANFILES = \
 	wf.core \

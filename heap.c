@@ -40,9 +40,8 @@
  * ===========================================================================
  */
 
-#include <wf.h>
-
 #include <heap.h>
+#include <wf.h>
 
 /*
  * Forward Delcarations.
