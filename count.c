@@ -95,6 +95,9 @@ count(FILE* ifp,
         status = -1;
     }
 
+    /* Sort the heap. */
+    heapSort(heap);
+
     /* Display the frequency of the top word counts. */
     dump(heap, ofp);
 

@@ -7,5 +7,6 @@ cat $1 \
     | sort \
     | uniq -c \
     | sort -nr \
-    | head -20 \
-    | sed -e 's/^  *//' -e 's/  */ /g'
+    | head -20
+
+exit $?

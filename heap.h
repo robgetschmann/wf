@@ -79,10 +79,16 @@ heapNew(uint32_t size);
 /**
  * @brief   Function prototype
  */
-void
+int
 heapInsert(Heap* heap,
            TrieNode** node,
            const char* word);
+
+/**
+ * @brief   Function prototype
+ */
+int
+heapSort(Heap* heap);
 
 /*
  * vim: cindent:cinoptions+={0,>1s,(0,t0,l1,^0:expandtab:smartindent:sw=4:ts=4:tw=0

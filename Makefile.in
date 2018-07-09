@@ -778,6 +778,20 @@ uninstall-am: uninstall-binPROGRAMS
 .PRECIOUS: Makefile
 
 
+sample-test: sample-mobydick sample-warandpeace
+
+sample-mobydick: wf
+	$(PWD)/wf sample/mobydick.input > /tmp/mobydick.output
+	diff -b -q sample/mobydick.output /tmp/mobydick.output
+	rm -f /tmp/mobydick.output
+
+sample-warandpeace: wf
+	$(PWD)/wf sample/warandpeace.input > /tmp/warandpeace.output
+	diff -b -q sample/warandpeace.output /tmp/warandpeace.output
+	rm -f /tmp/warandpeace.output
+
+.PHONY: sample-test sample-mobdydick sample-warandpeace
+
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
 .NOEXPORT:

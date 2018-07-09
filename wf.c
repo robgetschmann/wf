@@ -111,7 +111,7 @@ __attribute__ ((noreturn))
 jobCount(Job* job)
 {
 
-    /* The count job read from the pipe input only, close the output. */
+    /* The count job only reads from the pipe input, close the output. */
     close(job->channel[1]);
 
     /* Read input from the pipe, and write out out to standard output. */
@@ -144,7 +144,7 @@ __attribute__ ((noreturn))
 jobSqueeze(Job* job)
 {
 
-    /* The squeeze job writes to the pipe output only, close the input. */
+    /* The squeeze job only writes to the pipe output, close the input. */
     close(job->channel[0]);
 
     /* Read input from standard input, and write out out to the pipe. */
@@ -191,7 +191,8 @@ main(int argc,
 
         /* Error - zero or one command line argument only! */
         default: {
-            assert(argc == 1 || argc == 2);
+            fprintf(stderr, "usage: %s [ <FILE> ]\n", basename(argv[0]));
+            exit (4);
             break;
         }
 

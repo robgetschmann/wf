@@ -34,10 +34,13 @@ the end of input delimits a word.
 * Frequencies are determined based on case independence.  For example
 "Hello" and "hello" are considered equivalent.
 
-# Equivalent Command
+# Shell Equivalent Command Job
 
 The *wf* program produces equivalent output to the following _UN*X_ command
-line job:
+line job.  Note that *wf.sh* is included in the package distribution and
+the command documented below.  _GNU_ and _BSD_ flavors of the below commands
+have slight differences.  Please note that whitespace output by the shell
+command below will be different between _GNU_ and _BSD_.
 
 ---
 
@@ -51,16 +54,16 @@ cat $1 \
     | sort \
     | uniq -c \
     | sort -nr \
-    | head -20 \
-    | sed -e 's/^  *//' -e 's/  */ /g'
+    | head -20
+
+exit $?
 ```
 
 ---
 
-Usage
------
+# Usage
 
-# Example
+## Example
 
 The following demonstrates executing the *wf* program with the word
 "hello" repeated three times as input with different cases.  The output
@@ -75,3 +78,5 @@ $ echo "HELLO Hello hello" | wf
 ```
 
 ---
+
+## Testing

@@ -5,7 +5,7 @@
  *
  * @section DESCRIPTION
  *
- * Implementation module for ...
+ * Implementation module for Trie object
  *
  * @section LICENSE
  *
@@ -58,7 +58,7 @@ trieNodeNew(void)
 
 	TrieNode* node;
 
-	node = calloc(1, sizeof(TrieNode));
+	node = calloc(1, sizeof(*node));
 
 	node->complete = false;
 	node->frequency = 0;

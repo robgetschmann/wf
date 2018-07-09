@@ -24,3 +24,17 @@ wf_SOURCES = \
 	trie.c \
 	trie.h \
 	wf.c
+
+sample-test: sample-mobydick sample-warandpeace
+
+sample-mobydick: wf
+	$(PWD)/wf sample/mobydick.input > /tmp/mobydick.output
+	diff -b -q sample/mobydick.output /tmp/mobydick.output
+	rm -f /tmp/mobydick.output
+
+sample-warandpeace: wf
+	$(PWD)/wf sample/warandpeace.input > /tmp/warandpeace.output
+	diff -b -q sample/warandpeace.output /tmp/warandpeace.output
+	rm -f /tmp/warandpeace.output
+
+.PHONY: sample-test sample-mobdydick sample-warandpeace

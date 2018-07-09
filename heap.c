@@ -5,7 +5,7 @@
  *
  * @section DESCRIPTION
  *
- * Implementation module for ...
+ * Implementation module for Heap object
  *
  * @section LICENSE
  *
@@ -49,8 +49,13 @@
 /*
  * Forward declarations
  */
-static void heapBuild(Heap* heap);
-static void heapPercolate(Heap* heap, uint32_t index);
+static int
+heapBuild(Heap* heap);
+
+static int
+heapHeapify(Heap* heap,
+			uint32_t index,
+			uint32_t count);
 
 /**
  * @brief
@@ -58,20 +63,24 @@ static void heapPercolate(Heap* heap, uint32_t index);
  * @param
  * @return
  */
-static void
+static int
 heapBuild(Heap* heap)
 {
 
-    int i, j;
+    if (heap->count > 1) {
 
-    j = heap->count-1;
-    i = (j-1) / 2;
+        uint32_t count = heap->count - 1;
+        uint32_t index = (count - 1) / 2;
 
-    while (i >= 0) {
-        heapPercolate(heap, i--);
+        do {
+
+            heapHeapify(heap, index, heap->count);
+
+        } while (index-- != 0);
+
     }
 
-    return;
+    return (0);
 
 }
 
@@ -81,7 +90,7 @@ heapBuild(Heap* heap)
  * @param
  * @return
  */
-void
+int
 heapInsert(Heap* heap,
            TrieNode** node,
            const char* word)
@@ -92,7 +101,7 @@ heapInsert(Heap* heap,
 
         heap->vector[(*node)->index].frequency++;
 
-        heapPercolate(heap, (*node)->index);
+        heapHeapify(heap, (*node)->index, heap->count);
 
     }
 
@@ -123,15 +132,15 @@ heapInsert(Heap* heap,
         heap->vector[0].node->index = 0;
         heap->vector[0].frequency = (*node)->frequency;
 
-        // delete previously allocated memoory and
+        /* Delete word no longer in the top frequency count. */
         free(heap->vector[0].word);
         heap->vector[0].word = strdup(word);
 
-        heapPercolate(heap, 0);
+        heapHeapify(heap, 0, heap->count);
 
     }
 
-    return;
+    return (0);
 
 }
 
@@ -147,12 +156,12 @@ heapNew(uint32_t size)
 
     Heap* heap;
 
-    heap = calloc(1, sizeof(Heap));
+    heap = calloc(1, sizeof(*heap));
 
     heap->size = size;
     heap->count = 0;
 
-    heap->vector = calloc(heap->size, sizeof(HeapNode));
+    heap->vector = calloc(heap->size, sizeof(*heap->vector));
 
     return (heap);
 
@@ -164,45 +173,83 @@ heapNew(uint32_t size)
  * @param
  * @return
  */
-static void
-heapPercolate(Heap* heap,
-              uint32_t index)
+static int
+heapHeapify(Heap* heap,
+            uint32_t index,
+			uint32_t count)
 {
 
-    uint32_t left = index*2 + 1;
-    uint32_t right = left + 1;
-    uint32_t smallest = index;
+    uint32_t left = 2*index + 1;
+    uint32_t right = 2*index + 2;
+    uint32_t minimum = index;
 
-    if (left < heap->count
-        && heap->vector[left].frequency < heap->vector[smallest].frequency)
+    if (left < count
+        && heap->vector[left].frequency < heap->vector[minimum].frequency)
     {
-        smallest = left;
+        minimum = left;
     }
 
-    if (right < heap->count
-        && heap->vector[right].frequency < heap->vector[smallest].frequency)
+    if (right < count
+        && heap->vector[right].frequency < heap->vector[minimum].frequency)
     {
-        smallest = right;
+        minimum = right;
     }
 
-    if (smallest != index) {
+    if (minimum != index) {
 
         HeapNode node;
 
-        // Update the corresponding index in Trie node.
-        heap->vector[smallest].node->index = index;
-        heap->vector[index].node->index = smallest;
+        heap->vector[minimum].node->index = index;
+        heap->vector[index].node->index = minimum;
 
-        // Swap the nodes.
-        node = heap->vector[smallest];
-        heap->vector[smallest] = heap->vector[index];
+        /* Swap the nodes. */
+        node = heap->vector[minimum];
+        heap->vector[minimum] = heap->vector[index];
         heap->vector[index] = node;
 
-        heapPercolate(heap, smallest);
+        heapHeapify(heap, minimum, count);
 
     }
 
-    return;
+    return (0);
+
+}
+
+/**
+ * @brief
+ * @details
+ * @param
+ * @return
+ */
+int
+heapSort(Heap* heap)
+{
+
+    uint32_t count;
+
+    if ((count = heap->count) != 0) {
+
+        /* Build the heap. */
+        heapBuild(heap);
+
+        uint32_t index = count - 1;
+
+        /* Extract each element and add it back into the heap. */
+        do {
+
+            /* Move the current node to the end of the sorted list. */
+            HeapNode node = heap->vector[0];
+            heap->vector[0] = heap->vector[index];
+            heap->vector[index] = node;
+
+            /* Heapify the reduced heap. */
+            heapHeapify(heap, 0, index);
+
+        } while (index-- != 0);
+
+    }
+
+    return (0);
 
 }
 
