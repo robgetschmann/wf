@@ -5,6 +5,8 @@
  *
  * @section DESCRIPTION
  *
+ * Implementation module for ...
+ *
  * Provide a wrapper for calloc, malloc, and realloc.  The wrapper function
  * calls the C library version.  If memory allocation fails the wrapper will
  * invoke and assert() to terminate the process.
@@ -12,7 +14,7 @@
  * @section LICENSE
  *
  * ==============================
- * Copyright (c) 2017-2018, Robert A. Getschmann <rob@getschmann.net>
+ * Copyright (c) 2018, Robert A. Getschmann <rob@getschmann.net>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without
@@ -52,6 +54,7 @@
 extern void* __real_calloc(size_t nmemb, size_t size);
 extern void* __real_malloc(size_t size);
 extern void* __real_realloc(void* memory, size_t size);
+extern char* __real_strdup(const char* string);
 
 /**
  * @brief   Wrapper for C library calloc()
@@ -112,6 +115,25 @@ __wrap_realloc(void* memory,
     assert(m);
 
     return (m);
+
+}
+
+/**
+ * @brief   Wrapper for C library strdup()
+ * @details
+ * @param   Same parameters as C library realloc()
+ * @return  A pointer to the duplicated string
+ */
+void*
+__wrap_strdup(const char* string)
+{
+
+    char* s;
+
+    s = __real_strdup(string);
+    assert(s);
+
+    return (s);
 
 }
 

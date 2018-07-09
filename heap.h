@@ -5,6 +5,8 @@
  *
  * @section DESCRIPTION
  *
+ * Interface module for Heap object
+ *
  * @section LICENSE
  *
  * ===========================================================================
@@ -40,28 +42,18 @@
  * ===========================================================================
  */
 
-#include <stdbool.h>
-#include <stdint.h>
-
 #include <trie.h>
 
 #pragma once
 
 /*
- * Forward Declarations.
+ * Forward declarations
  */
 typedef struct Heap Heap;
 typedef struct HeapNode HeapNode;
 
 /**
- *
- */
-enum {
-    MAX_WORD_SIZE = 30
-};
-
-/**
- *
+ * @brief   Object representing a Sorted Heap
  */
 struct Heap {
     uint32_t count;
@@ -70,7 +62,7 @@ struct Heap {
 };
 
 /**
- *
+ * @brief   Object representing a Sorted Heap Node
  */
 struct HeapNode {
     TrieNode* node;
@@ -78,9 +70,15 @@ struct HeapNode {
     char* word;
 };
 
+/**
+ * @brief   Function prototype
+ */
 Heap*
 heapNew(uint32_t size);
 
+/**
+ * @brief   Function prototype
+ */
 void
 heapInsert(Heap* heap,
            TrieNode** node,

@@ -5,6 +5,8 @@
  *
  * @section DESCRIPTION
  *
+ * Interface module for character "squeeze" (filtering) functionality
+ *
  * @section LICENSE
  *
  * ===========================================================================
@@ -44,7 +46,12 @@
 
 #pragma once
 
-int squeeze(FILE* ifp, FILE* ofp);
+/**
+ * @brief   Function prototype
+ */
+int
+squeeze(FILE* ifp,
+        FILE* ofp);
 
 /*
  * vim: cindent:cinoptions+={0,>1s,(0,t0,l1,^0:expandtab:smartindent:sw=4:ts=4:tw=0

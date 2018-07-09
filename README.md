@@ -42,7 +42,7 @@ line job:
 ---
 
 ```shell
-`#! /usr/bin/env sh
+#! /usr/bin/env sh
 
 cat $1 \
     | tr -cs 'a-zA-Z' '[\n*]' \
@@ -51,7 +51,8 @@ cat $1 \
     | sort \
     | uniq -c \
     | sort -nr \
-    | head -20`
+    | head -20 \
+    | sed -e 's/^  *//' -e 's/  */ /g'
 ```
 
 ---

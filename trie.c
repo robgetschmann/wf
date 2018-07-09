@@ -5,11 +5,13 @@
  *
  * @section DESCRIPTION
  *
+ * Implementation module for ...
+ *
  * @section LICENSE
  *
  * ===========================================================================
  *
- * Copyright (c) 2017-2018, Robert A. Getschmann <rob@getschmann.net>
+ * Copyright (c) 2018, Robert A. Getschmann <rob@getschmann.net>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,14 +42,15 @@
  * ===========================================================================
  */
 
-#include <trie.h>
 #include <wf.h>
 
+#include <trie.h>
+
 /**
- * @brief
+ * @brief   Allocate and initialize a new Trie Node from the heap
  * @details
- * @param
- * @return
+ * @param   None
+ * @return  A pointer to a new Trie Node
  */
 TrieNode*
 trieNodeNew(void)

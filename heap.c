@@ -5,6 +5,8 @@
  *
  * @section DESCRIPTION
  *
+ * Implementation module for ...
+ *
  * @section LICENSE
  *
  * ===========================================================================
@@ -40,11 +42,12 @@
  * ===========================================================================
  */
 
-#include <heap.h>
 #include <wf.h>
 
+#include <heap.h>
+
 /*
- * Forward Delcarations.
+ * Forward Declarations
  */
 static void heapBuild(Heap* heap);
 static void heapPercolate(Heap* heap, uint32_t index);
@@ -99,9 +102,13 @@ heapInsert(Heap* heap,
         uint32_t count = heap->count;
 
         heap->vector[count].frequency = (*node)->frequency;
+#if 1
         heap->vector[count].word = calloc(strlen(word)+1, sizeof(char));
 
         strcpy(heap->vector[count].word, word);
+#else
+        heap->vector[0].word = strdup(word);
+#endif
 
         heap->vector[count].node = *node;
         (*node)->index = heap->count;
@@ -124,9 +131,13 @@ heapInsert(Heap* heap,
 
         // delete previously allocated memoory and
         free(heap->vector[0].word);
+#if 1
         heap->vector[0].word = calloc(strlen(word)+1, sizeof(char));
 
         strcpy(heap->vector[0].word, word);
+#else
+        heap->vector[0].word = strdup(word);
+#endif
 
         heapPercolate(heap, 0);
 
@@ -159,9 +170,6 @@ heapNew(uint32_t size)
 
 }
 
-// This is the standard heapify function.It does one thing extra.
-// It updates the minHapIndex in Trie when two nodes are swapped in
-// in min heap
 /**
  * @brief
  * @details

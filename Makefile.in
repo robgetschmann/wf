@@ -266,7 +266,6 @@ pdfdir = @pdfdir@
 prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
-runstatedir = @runstatedir@
 sbindir = @sbindir@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
@@ -276,7 +275,7 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CFLAGS = -Wall -Werror -Wextra
-AM_LDFLAGS = -Wl,-wrap,calloc,-wrap,malloc,-wrap,realloc
+AM_LDFLAGS = -Wl,-wrap,calloc,-wrap,malloc,-wrap,realloc,-wrap,strdup
 CLEANFILES = \
 	wf.core \
 	config.log \

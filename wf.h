@@ -5,7 +5,7 @@
  *
  * @section DESCRIPTION
  *
- * Meta file to include C library header files and program globals
+ * Meta file to include C library header files and program global declarations
  *
  * @section LICENSE
  *
@@ -44,6 +44,8 @@
 
 #pragma once
 
+#define _WITH_GETLINE
+
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
@@ -58,7 +60,7 @@
 #include <unistd.h>
 
 /**
- *
+ * @brief   Number of top frequent words to be reported
  */
 extern const uint32_t frequencyCount;
 

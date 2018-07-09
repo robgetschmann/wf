@@ -5,11 +5,13 @@
  *
  * @section DESCRIPTION
  *
+ * Implementation module for ...
+ *
  * @section LICENSE
  *
  * ===========================================================================
  *
- * Copyright (c) 2017-2018, Robert A. Getschmann <rob@getschmann.net>
+ * Copyright (c) 2018, Robert A. Getschmann <rob@getschmann.net>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,10 +42,11 @@
  * ===========================================================================
  */
 
+#include <wf.h>
+
 #include <count.h>
 #include <heap.h>
 #include <trie.h>
-#include <wf.h>
 
 /*
  * Forward Declarations
@@ -67,11 +70,15 @@ count(FILE* ifp,
       FILE* ofp)
 {
 
+    static char* buffer;
+    static size_t buffer_size;
+
     Heap* heap = heapNew(frequencyCount);
     TrieNode* root = NULL;
     int status = 0;
 
-    for (char buffer[4096]; fgets(buffer, sizeof(buffer), ifp); ) {
+    while (getline(&buffer, &buffer_size, ifp) != -1) {
+        /* Eat the newline. */
         buffer[strlen(buffer)-1] = '\0';
         insert(&root, heap, buffer, buffer);
     }
@@ -87,6 +94,8 @@ count(FILE* ifp,
 
     /* Display the frequency of the top word counts. */
     dump(heap, ofp);
+
+    free(buffer);
 
     return (status);
 

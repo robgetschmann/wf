@@ -9,7 +9,7 @@
  *
  * ===========================================================================
  *
- * Copyright (c) 2017-2018, Robert A. Getschmann <rob@getschmann.net>
+ * Copyright (c) 2018, Robert A. Getschmann <rob@getschmann.net>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,8 +40,9 @@
  * ===========================================================================
  */
 
-#include <squeeze.h>
 #include <wf.h>
+
+#include <squeeze.h>
 
 /**
  * @brief   Filter input within the character class [a-zA-Z]

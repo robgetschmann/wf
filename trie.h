@@ -5,6 +5,8 @@
  *
  * @section DESCRIPTION
  *
+ * Interface module for Trie object
+ *
  * @section LICENSE
  *
  * ===========================================================================
@@ -40,28 +42,35 @@
  * ===========================================================================
  */
 
-#include <stdbool.h>
-#include <stdint.h>
-
 #pragma once
 
+/**
+ *
+ */
 enum {
-    MAXIMUM_CHARACTERS = 26
+    CHILD_NODE_COUNT = 26
 };
 
 typedef struct TrieNode TrieNode;
 
+/**
+ * @brief   Object representing a Trie Node
+ */
 struct TrieNode {
 
     bool complete;
     uint32_t frequency;
     int32_t index;
 
-    TrieNode* child[MAXIMUM_CHARACTERS];
+    TrieNode* child[CHILD_NODE_COUNT];
 
 };
 
-TrieNode* trieNodeNew(void);
+/**
+ * @brief   Function prototype
+ */
+TrieNode*
+trieNodeNew(void);
 
 /*
  * vim: cindent:cinoptions+={0,>1s,(0,t0,l1,^0:expandtab:smartindent:sw=4:ts=4:tw=0

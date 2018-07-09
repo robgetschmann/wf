@@ -1,6 +1,6 @@
 AM_CFLAGS = -Wall -Werror -Wextra
 
-AM_LDFLAGS = -Wl,-wrap,calloc,-wrap,malloc,-wrap,realloc
+AM_LDFLAGS = -Wl,-wrap,calloc,-wrap,malloc,-wrap,realloc,-wrap,strdup
 
 CLEANFILES = \
 	wf.core \

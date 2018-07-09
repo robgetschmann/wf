@@ -5,6 +5,8 @@
  *
  * @section DESCRIPTION
  *
+ * Interface module for character "count" (frequency) functionality
+ *
  * @section LICENSE
  *
  * ===========================================================================
@@ -40,11 +42,14 @@
  * ===========================================================================
  */
 
-#include <stdio.h>
-
 #pragma once 
 
-int count(FILE* ifp, FILE* ofp);
+/**
+ * @brief   Function prototype
+ */
+int
+count(FILE* ifp,
+      FILE* ofp);
 
 /*
  * vim: cindent:cinoptions+={0,>1s,(0,t0,l1,^0:expandtab:smartindent:sw=4:ts=4:tw=0
