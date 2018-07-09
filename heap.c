@@ -102,13 +102,7 @@ heapInsert(Heap* heap,
         uint32_t count = heap->count;
 
         heap->vector[count].frequency = (*node)->frequency;
-#if 1
-        heap->vector[count].word = calloc(strlen(word)+1, sizeof(char));
-
-        strcpy(heap->vector[count].word, word);
-#else
-        heap->vector[0].word = strdup(word);
-#endif
+        heap->vector[count].word = strdup(word);
 
         heap->vector[count].node = *node;
         (*node)->index = heap->count;
@@ -131,13 +125,7 @@ heapInsert(Heap* heap,
 
         // delete previously allocated memoory and
         free(heap->vector[0].word);
-#if 1
-        heap->vector[0].word = calloc(strlen(word)+1, sizeof(char));
-
-        strcpy(heap->vector[0].word, word);
-#else
         heap->vector[0].word = strdup(word);
-#endif
 
         heapPercolate(heap, 0);
 
