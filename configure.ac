@@ -25,7 +25,7 @@ AC_FUNC_FORK
 AC_FUNC_MALLOC
 AC_FUNC_REALLOC
 
-AC_CHECK_FUNCS([malloc])
+AC_CHECK_FUNCS([basename calloc isalpha malloc strdup])
 
 AC_CONFIG_FILES([Makefile])
 

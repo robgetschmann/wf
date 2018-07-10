@@ -68,8 +68,8 @@ typedef void (JobFunc)(Job* job);
  * @brief   object for maintaining a child process "job" configurables
  */
 struct Job {
-    JobFunc* entry;
-    int channel[2];
+    JobFunc* entry;     /** function entry point for the job */
+    int channel[2];     /** pipe for process communication */
 };
 
 /*
@@ -125,6 +125,9 @@ jobCount(Job* job)
      * Exit the child process with the return status from count().
      * Upon exiting the child process the input and output file streams
      * will be closed indicated EOF to any readers.
+     *
+     * Final cleanup of dynamically allocated memory will not be performed
+     * since operating system takes care of this when the process terminates.
      */
     exit(count(ifp, ofp));
 
@@ -159,6 +162,9 @@ jobSqueeze(Job* job)
      * Exit the child process with the return status from squeeze().
      * Upon exiting the child process the input and output file streams
      * will be closed indicated EOF to any readers.
+     *
+     * Final cleanup of dynamically allocated memory will not be performed
+     * since operating system takes care of this when the process terminates.
      */
     exit(squeeze(ifp, ofp));
 
@@ -265,6 +271,7 @@ main(int argc,
         if (WIFEXITED(child_status)) {
             status += WEXITSTATUS(status);
         }
+        /* TODO: Handle other process events. */
 
     }
 
