@@ -55,15 +55,15 @@ TrieNode*
 trieNodeNew(void)
 {
 
-	TrieNode* node;
+    TrieNode* node;
 
-	node = calloc(1, sizeof(*node));
+    node = calloc(1, sizeof(*node));
 
-	node->complete = false;
-	node->frequency = 0;
-	node->index = -1;
+    node->complete = false;
+    node->frequency = 0;
+    node->index = -1;
 
-	return (node);
+    return (node);
 
 }
 
