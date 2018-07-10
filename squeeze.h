@@ -47,7 +47,7 @@
 #pragma once
 
 /**
- * @brief   Function prototype
+ * @brief   function prototype
  */
 int
 squeeze(FILE* ifp,

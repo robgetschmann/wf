@@ -45,7 +45,7 @@
 #pragma once 
 
 /**
- * @brief   Function prototype
+ * @brief   function prototype
  */
 int
 count(FILE* ifp,

@@ -5,7 +5,7 @@
  *
  * @section DESCRIPTION
  *
- * Implementation module for Heap object
+ * Implementation module for heap object
  *
  * @section LICENSE
  *
@@ -47,7 +47,7 @@
 #include <heap.h>
 
 /*
- * Forward declarations
+ * function prototypes
  */
 static int
 heapBuild(Heap* heap);
@@ -59,8 +59,8 @@ heapHeapify(Heap* heap,
 
 /**
  * @brief
- * @param
- * @return
+ * @param   the heap to be built
+ * @return  0 - success, -1 - failure
  */
 static int
 heapBuild(Heap* heap)
@@ -76,6 +76,29 @@ heapBuild(Heap* heap)
             heapHeapify(heap, index, heap->count);
 
         } while (index-- != 0);
+
+    }
+
+    return (0);
+
+}
+
+/**
+ * @brief   display the top frequency counts and the corresponding word
+ * @param   heap the heap containing the top frequency counts and word
+ * @param   ofp the output file stream
+ * @return  0 - success, -1 - failure
+ */
+int
+heapDump(Heap* heap,
+         FILE* ofp)
+{
+
+    for (uint32_t i = 0; i < heap->count; i++) {
+
+        fprintf(ofp, "%d %s\n",
+                heap->vector[i].frequency,
+                heap->vector[i].word);
 
     }
 
@@ -114,14 +137,12 @@ heapHeapify(Heap* heap,
 
     if (minimum != index) {
 
-        HeapNode node;
-
         /* Update the trie index into the heap. */
         heap->vector[minimum].node->index = index;
         heap->vector[index].node->index = minimum;
 
         /* Swap the nodes. */
-        node = heap->vector[minimum];
+        HeapNode node = heap->vector[minimum];
         heap->vector[minimum] = heap->vector[index];
         heap->vector[index] = node;
 
@@ -134,7 +155,7 @@ heapHeapify(Heap* heap,
 }
 
 /**
- * @brief
+ * @brief   insert a word into the trie and possibly the heap
  * @param   heap the heap to have an item inserted
  * @param   node a pointer to the corresponding trie node
  * @param   word the word to be inserted into the heap
@@ -197,7 +218,7 @@ heapInsert(Heap* heap,
 }
 
 /**
- * @brief   allocated a new heap object of a given size
+ * @brief   allocate a new heap object of a given size
  * @param   size the size of the heap
  * @return  a pointer to the newly allocated heap object
  */

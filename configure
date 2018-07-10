@@ -583,7 +583,7 @@ PACKAGE_TARNAME='wf'
 PACKAGE_VERSION='0.1'
 PACKAGE_STRING='wf 0.1'
 PACKAGE_BUGREPORT='rob@getschmann.net'
-PACKAGE_URL='http://getschmann.net'
+PACKAGE_URL='http://getschmann.net/'
 
 ac_unique_file="heap.h"
 # Factoring default headers for most tests.
@@ -1361,7 +1361,7 @@ Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
 
 Report bugs to <rob@getschmann.net>.
-wf home page: <http://getschmann.net>.
+wf home page: <http://getschmann.net/>.
 _ACEOF
 ac_status=$?
 fi
@@ -5529,7 +5529,7 @@ Configuration commands:
 $config_commands
 
 Report bugs to <rob@getschmann.net>.
-wf home page: <http://getschmann.net>."
+wf home page: <http://getschmann.net/>."
 
 _ACEOF
 cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1

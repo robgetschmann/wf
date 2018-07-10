@@ -5,7 +5,7 @@
  *
  * @section DESCRIPTION
  *
- * Interface module for Trie object
+ * Interface module for trie object
  *
  * @section LICENSE
  *
@@ -46,14 +46,14 @@
 
 enum {
 
-    TRIE_CHILD_NODE_COUNT = 26              /* maximum Trie child nodes */
+    TRIE_SIZE = 26                          /** maximum trie size */
 
 };
 
 typedef struct TrieNode TrieNode;
 
 /**
- * @brief   Object representing a Trie Node
+ * @brief   object representing a trie node
  */
 struct TrieNode {
 
@@ -61,12 +61,12 @@ struct TrieNode {
     uint32_t frequency;                     /** word frequency */
     int32_t index;                          /** word index in heap */
 
-    TrieNode* child[TRIE_CHILD_NODE_COUNT]; /* node children */
+    TrieNode* child[TRIE_SIZE];             /* child nodes */
 
 };
 
 /**
- * @brief   Function prototype
+ * @brief   function prototype
  */
 TrieNode*
 trieNodeNew(void);

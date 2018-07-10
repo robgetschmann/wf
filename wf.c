@@ -55,17 +55,17 @@
 #include <squeeze.h>
 
 /*
- * Forward declarations
+ * forward declarations
  */
 typedef struct Job Job;
 
 /**
- * @brief   Word frequency job function entry point prototype
+ * @brief   word frequency job function entry point prototype
  */
 typedef void (JobFunc)(Job* job);
 
 /**
- * @brief   Object for maintaining a child process "job" configurables
+ * @brief   object for maintaining a child process "job" configurables
  */
 struct Job {
     JobFunc* entry;
@@ -73,13 +73,13 @@ struct Job {
 };
 
 /*
- * Forward declarations
+ * function prototypes
  */
 static JobFunc jobCount;
 static JobFunc jobSqueeze;
 
 /**
- * @brief   Vector of the jobs for processing the text word frequencies
+ * @brief   vector of the jobs for processing the text word frequencies
  */
 static Job jobVector[] = {
     { jobSqueeze,   { -1, -1} },
@@ -87,19 +87,19 @@ static Job jobVector[] = {
 };
 
 /**
- * @brief   The count of the number of jobs supported
+ * @brief   the count of the number of jobs supported
  */
 static uint32_t jobMax = sizeof(jobVector) / sizeof(jobVector[0]);
 
 /**
- * @brief   The top frequency counts to be displayed - Global
+ * @brief   the top frequency counts to be displayed - Global
  */
-const uint32_t frequencyCount = 20;
+uint32_t frequencyCount = 20;
 
 /**
- * @brief   Entry point for the word frequency count job
+ * @brief   entry point for the word frequency count job
  * @param   job the job entry details
- * @return  None
+ * @return  none
  */
 static void
 __attribute__ ((noreturn))
@@ -131,9 +131,9 @@ jobCount(Job* job)
 }
 
 /**
- * @brief   Entry point for the input filtering job
+ * @brief   entry point for the input filtering job
  * @param   job the job entry details
- * @return  None
+ * @return  none
  */
 static void
 __attribute__ ((noreturn))
@@ -181,8 +181,6 @@ int
 main(int argc,
      char** argv)
 {
-
-    int status = 0;
 
     /* Process any command line arguments. */
     switch (argc) {
@@ -255,6 +253,8 @@ main(int argc,
     close(channel[1]);
 
     /* Wait for the child processes to terminate. */
+    int status = 0;
+
     for (uint32_t i = 0; i < jobSpawned; i++) {
 
         pid_t child __attribute__ ((unused));
@@ -273,8 +273,7 @@ main(int argc,
      * program.  Memory for the various structures won't be free.  Instead the
      * operating system will clean up upon process termination.
      */
-
-    exit(0);
+    exit(status);
 
 }
 

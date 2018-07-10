@@ -47,7 +47,7 @@
 #include <squeeze.h>
 
 /**
- * @brief   Filter input within the character class [a-zA-Z]
+ * @brief   filter input within the character class [a-zA-Z]
  * @param   ifp input stream file pointer
  * @param   ofp output stream file pointer
  * @return  0 - success, -1 - failure

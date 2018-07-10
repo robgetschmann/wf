@@ -5,7 +5,7 @@
  *
  * @section DESCRIPTION
  *
- * Implementation module for Trie object
+ * Implementation module for trie object
  *
  * @section LICENSE
  *
@@ -47,9 +47,9 @@
 #include <trie.h>
 
 /**
- * @brief   Allocate and initialize a new Trie Node from the heap
- * @param   None
- * @return  A pointer to a new Trie Node
+ * @brief   allocate and initialize a new Trie Node from the heap
+ * @param   none
+ * @return  a pointer to a new Trie Node
  */
 TrieNode*
 trieNodeNew(void)

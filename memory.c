@@ -47,9 +47,9 @@
 #include <wf.h>
 
 /*
- * External function declarations.
+ * external function prototypes
  *
- * C Standard Library memory functions.
+ * C Standard Library memory functions
  */
 extern void* __real_calloc(size_t nmemb, size_t size);
 extern void* __real_malloc(size_t size);
@@ -57,9 +57,9 @@ extern void* __real_realloc(void* memory, size_t size);
 extern char* __real_strdup(const char* string);
 
 /**
- * @brief   Wrapper for C library calloc()
- * @param   Same parameters as C library calloc()
- * @return  A pointer to the memory allocated or NULL
+ * @brief   wrapper for C library calloc()
+ * @param   same parameters as C library calloc()
+ * @return  a pointer to the memory allocated or NULL
  */
 void*
 __attribute__ ((malloc))
@@ -77,9 +77,9 @@ __wrap_calloc(size_t nmemb,
 }
 
 /**
- * @brief   Wrapper for C library malloc()
- * @param   Same parameters as C library malloc()
- * @return  A pointer to the memory allocated or NULL
+ * @brief   wrapper for C library malloc()
+ * @param   same parameters as C library malloc()
+ * @return  a pointer to the memory allocated or NULL
  */
 void*
 __attribute__ ((malloc))
@@ -96,9 +96,9 @@ __wrap_malloc(size_t size)
 }
 
 /**
- * @brief   Wrapper for C library realloc()
- * @param   Same parameters as C library realloc()
- * @return  A pointer to the memory reallocated or NULL
+ * @brief   wrapper for C library realloc()
+ * @param   same parameters as C library realloc()
+ * @return  a pointer to the memory reallocated or NULL
  */
 void*
 __attribute__ ((malloc))
@@ -116,9 +116,9 @@ __wrap_realloc(void* memory,
 }
 
 /**
- * @brief   Wrapper for C library strdup()
- * @param   Same parameters as C library realloc()
- * @return  A pointer to the duplicated string
+ * @brief   wrapper for C library strdup()
+ * @param   same parameters as C library realloc()
+ * @return  a pointer to the duplicated string
  */
 void*
 __wrap_strdup(const char* string)

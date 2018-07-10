@@ -59,9 +59,9 @@
 #include <unistd.h>
 
 /**
- * @brief   Number of top frequent words to be reported
+ * @brief   number of top frequent words to be reported
  */
-extern const uint32_t frequencyCount;
+extern uint32_t frequencyCount;
 
 /*
  * vim: cindent:cinoptions+={0,>1s,(0,t0,l1,^0:expandtab:smartindent:sw=4:ts=4:tw=0

@@ -1,5 +1,5 @@
 AC_PREREQ([2.69])
-AC_INIT([wf], [0.1], [rob@getschmann.net], [], [http://getschmann.net])
+AC_INIT([wf], [0.1], [rob@getschmann.net], [], [http://getschmann.net/])
 
 AC_CONFIG_SRCDIR([heap.h])
 AC_CONFIG_HEADERS([config.h])

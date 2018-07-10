@@ -5,7 +5,7 @@
  *
  * @section DESCRIPTION
  *
- * Interface module for Heap object
+ * Interface module for heap object
  *
  * @section LICENSE
  *
@@ -47,13 +47,13 @@
 #pragma once
 
 /*
- * Forward declarations
+ * forward declarations
  */
 typedef struct Heap Heap;
 typedef struct HeapNode HeapNode;
 
 /**
- * @brief   Object representing a Sorted Heap
+ * @brief   object representing a sorted heap
  */
 struct Heap {
     uint32_t count;     /* number of nodes within the heap */
@@ -62,7 +62,7 @@ struct Heap {
 };
 
 /**
- * @brief   Object representing a Sorted Heap Node
+ * @brief   object representing a sorted heap node
  */
 struct HeapNode {
     TrieNode* node;     /* pointer to associate trie and heap node */
@@ -71,13 +71,20 @@ struct HeapNode {
 };
 
 /**
- * @brief   Function prototype
+ * @brief   function Prototype
+ */
+int
+heapDump(Heap* heap,
+         FILE* ofp);
+
+/**
+ * @brief   function prototype
  */
 Heap*
 heapNew(uint32_t size);
 
 /**
- * @brief   Function prototype
+ * @brief   function prototype
  */
 int
 heapInsert(Heap* heap,
@@ -85,7 +92,7 @@ heapInsert(Heap* heap,
            const char* word);
 
 /**
- * @brief   Function prototype
+ * @brief   function prototype
  */
 int
 heapSort(Heap* heap);
