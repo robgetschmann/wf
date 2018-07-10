@@ -128,7 +128,7 @@ heapHeapify(Heap* heap,
             minimum = left;
         }
         else if (heap->vector[left].frequency == heap->vector[minimum].frequency
-                 && strcmp(heap->vector[left].word, heap->vector[minimum].word) > 0) {
+                 && strcmp(heap->vector[left].word, heap->vector[minimum].word) < 0) {
             minimum = left;
         }
     }
@@ -138,7 +138,7 @@ heapHeapify(Heap* heap,
             minimum = right;
         }
         else if (heap->vector[right].frequency == heap->vector[minimum].frequency
-                 && strcmp(heap->vector[right].word, heap->vector[minimum].word) > 0) {
+                 && strcmp(heap->vector[right].word, heap->vector[minimum].word) < 0) {
             minimum = right;
         }
     }
@@ -209,7 +209,7 @@ heapInsert(Heap* heap,
              (node->frequency > heap->vector[0].frequency)
              ||
              ((node->frequency == heap->vector[0].frequency)
-              && (strcmp(word, heap->vector[0].word) < 0))
+              && (strcmp(word, heap->vector[0].word) > 0))
             )
     {
 
@@ -225,24 +225,6 @@ heapInsert(Heap* heap,
         heapHeapify(heap, 0, heap->count);
 
     }
-
-#if 0
-    else if ((node->frequency == heap->vector[0].frequency)
-             && (strcmp(word, heap->vector[0].word) < 0))
-    {
-
-        heap->vector[0].node->index = -1;
-        heap->vector[0].node = node;
-        heap->vector[0].node->index = 0;
-        heap->vector[0].frequency = node->frequency;
-
-        /* Delete word no longer in the top frequency count. */
-        free(heap->vector[0].word);
-        heap->vector[0].word = strdup(word);
-
-        heapHeapify(heap, 0, heap->count);
-    }
-#endif
 
     return (0);
 

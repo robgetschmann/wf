@@ -1,0 +1,103 @@
+\hypertarget{memory_8c}{}\section{memory.\+c File Reference}
+\label{memory_8c}\index{memory.\+c@{memory.\+c}}
+{\ttfamily \#include $<$wf.\+h$>$}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{memory_8c_a3c6b7dd113614598c7931b13b19336f2}\label{memory_8c_a3c6b7dd113614598c7931b13b19336f2}} 
+void $\ast$ {\bfseries \+\_\+\+\_\+real\+\_\+calloc} (size\+\_\+t nmemb, size\+\_\+t size)
+\item 
+\mbox{\Hypertarget{memory_8c_a707b38b394ed2a237dee19412051125b}\label{memory_8c_a707b38b394ed2a237dee19412051125b}} 
+void $\ast$ {\bfseries \+\_\+\+\_\+real\+\_\+malloc} (size\+\_\+t size)
+\item 
+\mbox{\Hypertarget{memory_8c_a4357dfcc8b5d2a7dc63c91915e812abe}\label{memory_8c_a4357dfcc8b5d2a7dc63c91915e812abe}} 
+void $\ast$ {\bfseries \+\_\+\+\_\+real\+\_\+realloc} (void $\ast$memory, size\+\_\+t size)
+\item 
+\mbox{\Hypertarget{memory_8c_ad8bf28c4cd1a50761d5c2445da0f9f7a}\label{memory_8c_ad8bf28c4cd1a50761d5c2445da0f9f7a}} 
+char $\ast$ {\bfseries \+\_\+\+\_\+real\+\_\+strdup} (const char $\ast$string)
+\item 
+void $\ast$ \mbox{\hyperlink{memory_8c_a2be3da6718ea80af65d2580d34c7d353}{\+\_\+\+\_\+attribute\+\_\+\+\_\+}} ((malloc))
+\begin{DoxyCompactList}\small\item\em wrapper for C library calloc() \end{DoxyCompactList}\item 
+void $\ast$ \mbox{\hyperlink{memory_8c_a4cd780ba4053ef21e92d03a7169d25c1}{\+\_\+\+\_\+wrap\+\_\+strdup}} (const char $\ast$string)
+\begin{DoxyCompactList}\small\item\em wrapper for C library strdup() \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\begin{DoxyAuthor}{Author}
+Robert A. Getschmann \href{mailto:rob@getschmann.net}{\tt rob@getschmann.\+net}
+\end{DoxyAuthor}
+\hypertarget{wf_8h_DESCRIPTION}{}\subsection{D\+E\+S\+C\+R\+I\+P\+T\+I\+ON}\label{wf_8h_DESCRIPTION}
+Implementation module for memory wrapper functions
+
+Provide a wrapper for calloc, malloc, and realloc. The wrapper function calls the C library version. If memory allocation fails the wrapper will invoke and assert() to terminate the process.\hypertarget{wf_8h_LICENSE}{}\subsection{L\+I\+C\+E\+N\+SE}\label{wf_8h_LICENSE}
+
+
+ Copyright (c) 2018, Robert A. Getschmann \href{mailto:rob@getschmann.net}{\tt rob@getschmann.\+net} All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met\+:
+\begin{DoxyEnumerate}
+\item Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+\item Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+\item All advertising materials mentioning features or use of this software must display the following acknowledgement\+: This product includes software developed by the $<$organization$>$.
+\item Neither the name of the $<$organization$>$ nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+\end{DoxyEnumerate}
+
+T\+H\+IS S\+O\+F\+T\+W\+A\+RE IS P\+R\+O\+V\+I\+D\+ED BY $<$\+C\+O\+P\+Y\+R\+I\+G\+H\+T holder$>$=\char`\"{}\char`\"{}$>$ \textquotesingle{}\textquotesingle{}AS IS\textquotesingle{}\textquotesingle{} A\+ND A\+NY E\+X\+P\+R\+E\+SS OR I\+M\+P\+L\+I\+ED W\+A\+R\+R\+A\+N\+T\+I\+ES, I\+N\+C\+L\+U\+D\+I\+NG, B\+UT N\+OT L\+I\+M\+I\+T\+ED TO, T\+HE I\+M\+P\+L\+I\+ED W\+A\+R\+R\+A\+N\+T\+I\+ES OF M\+E\+R\+C\+H\+A\+N\+T\+A\+B\+I\+L\+I\+TY A\+ND F\+I\+T\+N\+E\+SS F\+OR A P\+A\+R\+T\+I\+C\+U\+L\+AR P\+U\+R\+P\+O\+SE A\+RE D\+I\+S\+C\+L\+A\+I\+M\+ED. IN NO E\+V\+E\+NT S\+H\+A\+LL $<$\+C\+O\+P\+Y\+R\+I\+G\+H\+T holder$>$=\char`\"{}\char`\"{}$>$ BE L\+I\+A\+B\+LE F\+OR A\+NY D\+I\+R\+E\+CT, I\+N\+D\+I\+R\+E\+CT, I\+N\+C\+I\+D\+E\+N\+T\+AL, S\+P\+E\+C\+I\+AL, E\+X\+E\+M\+P\+L\+A\+RY, OR C\+O\+N\+S\+E\+Q\+U\+E\+N\+T\+I\+AL D\+A\+M\+A\+G\+ES (I\+N\+C\+L\+U\+D\+I\+NG, B\+UT N\+OT L\+I\+M\+I\+T\+ED TO, P\+R\+O\+C\+U\+R\+E\+M\+E\+NT OF S\+U\+B\+S\+T\+I\+T\+U\+TE G\+O\+O\+DS OR S\+E\+R\+V\+I\+C\+ES; L\+O\+SS OF U\+SE, D\+A\+TA, OR P\+R\+O\+F\+I\+TS; OR B\+U\+S\+I\+N\+E\+SS I\+N\+T\+E\+R\+R\+U\+P\+T\+I\+ON) H\+O\+W\+E\+V\+ER C\+A\+U\+S\+ED A\+ND ON A\+NY T\+H\+E\+O\+RY OF L\+I\+A\+B\+I\+L\+I\+TY, W\+H\+E\+T\+H\+ER IN C\+O\+N\+T\+R\+A\+CT, S\+T\+R\+I\+CT L\+I\+A\+B\+I\+L\+I\+TY, OR T\+O\+RT (I\+N\+C\+L\+U\+D\+I\+NG N\+E\+G\+L\+I\+G\+E\+N\+CE OR O\+T\+H\+E\+R\+W\+I\+SE) A\+R\+I\+S\+I\+NG IN A\+NY W\+AY O\+UT OF T\+HE U\+SE OF \subsection*{T\+H\+IS S\+O\+F\+T\+W\+A\+RE, E\+V\+EN IF A\+D\+V\+I\+S\+ED OF T\+HE P\+O\+S\+S\+I\+B\+I\+L\+I\+TY OF S\+U\+CH D\+A\+M\+A\+GE. }
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{memory_8c_a2be3da6718ea80af65d2580d34c7d353}\label{memory_8c_a2be3da6718ea80af65d2580d34c7d353}} 
+\index{memory.\+c@{memory.\+c}!\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}}
+\index{\+\_\+\+\_\+attribute\+\_\+\+\_\+@{\+\_\+\+\_\+attribute\+\_\+\+\_\+}!memory.\+c@{memory.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+attribute\+\_\+\+\_\+()}{\_\_attribute\_\_()}}
+{\footnotesize\ttfamily void $\ast$ \+\_\+\+\_\+attribute\+\_\+\+\_\+ (\begin{DoxyParamCaption}\item[{(malloc)}]{ }\end{DoxyParamCaption})}
+
+
+
+wrapper for C library calloc() 
+
+wrapper for C library realloc()
+
+wrapper for C library malloc()
+
+
+\begin{DoxyParams}{Parameters}
+{\em same} & parameters as C library calloc() \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to the memory allocated or N\+U\+LL
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em same} & parameters as C library malloc() \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to the memory allocated or N\+U\+LL
+\end{DoxyReturn}
+
+\begin{DoxyParams}{Parameters}
+{\em same} & parameters as C library realloc() \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to the memory reallocated or N\+U\+LL 
+\end{DoxyReturn}
+\mbox{\Hypertarget{memory_8c_a4cd780ba4053ef21e92d03a7169d25c1}\label{memory_8c_a4cd780ba4053ef21e92d03a7169d25c1}} 
+\index{memory.\+c@{memory.\+c}!\+\_\+\+\_\+wrap\+\_\+strdup@{\+\_\+\+\_\+wrap\+\_\+strdup}}
+\index{\+\_\+\+\_\+wrap\+\_\+strdup@{\+\_\+\+\_\+wrap\+\_\+strdup}!memory.\+c@{memory.\+c}}
+\subsubsection{\texorpdfstring{\+\_\+\+\_\+wrap\+\_\+strdup()}{\_\_wrap\_strdup()}}
+{\footnotesize\ttfamily void$\ast$ \+\_\+\+\_\+wrap\+\_\+strdup (\begin{DoxyParamCaption}\item[{const char $\ast$}]{string }\end{DoxyParamCaption})}
+
+
+
+wrapper for C library strdup() 
+
+
+\begin{DoxyParams}{Parameters}
+{\em same} & parameters as C library realloc() \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a pointer to the duplicated string 
+\end{DoxyReturn}
