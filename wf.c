@@ -223,7 +223,7 @@ main(int argc,
     memcpy(jobVector[0].channel, channel, sizeof(channel));
     memcpy(jobVector[1].channel, channel, sizeof(channel));
 
-    uint32_t jobSpawned = 0;
+    uint32_t job_count = 0;
 
     /* Create a child process for the squeeze and count jobs. */
     for (uint32_t i = 0; i < jobMax; i++) {
@@ -240,7 +240,7 @@ main(int argc,
 
             /* Parent - do nothing. */
             default: {
-                jobSpawned++;
+                job_count++;
                 break;
             }
 
@@ -261,7 +261,7 @@ main(int argc,
     /* Wait for the child processes to terminate. */
     int status = 0;
 
-    for (uint32_t i = 0; i < jobSpawned; i++) {
+    for (uint32_t i = 0; i < job_count; i++) {
 
         pid_t child __attribute__ ((unused));
         int child_status;
