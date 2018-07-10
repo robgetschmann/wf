@@ -25,7 +25,12 @@ wf_SOURCES = \
 	trie.h \
 	wf.c
 
-sample-test: sample-mobydick sample-warandpeace sample-large sample-lexiographic-1
+sample-test: \
+	sample-mobydick \
+	sample-warandpeace \
+	sample-large \
+	sample-lexiographic-1 \
+	sample-lexiographic-2
 
 sample-mobydick: wf
 	@echo "Comparing 'Moby Dick' Frequencies"
@@ -50,6 +55,12 @@ sample-lexiographic-1: wf
 	@$(PWD)/wf sample/lexiographic-1.input > /tmp/lexiographic-1.output
 	@diff -w -q sample/lexiographic-1.output /tmp/lexiographic-1.output
 	@rm -f /tmp/lexiographic-1.output
+
+sample-lexiographic-2: wf
+	@echo "Comparing lexiographic2 Frequencies"
+	@$(PWD)/wf sample/lexiographic-2.input > /tmp/lexiographic-2.output
+	@diff -w -q sample/lexiographic-2.output /tmp/lexiographic-2.output
+	@rm -f /tmp/lexiographic-2.output
 
 .PHONY: sample-test
 .PHONY: sample-mobydick
