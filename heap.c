@@ -123,16 +123,24 @@ heapHeapify(Heap* heap,
     uint32_t right = left + 1;
     uint32_t minimum = index;
 
-    if (left < count
-        && heap->vector[left].frequency < heap->vector[minimum].frequency)
-    {
-        minimum = left;
+    if (left < count) {
+        if (heap->vector[left].frequency < heap->vector[minimum].frequency) {
+            minimum = left;
+        }
+        else if (heap->vector[left].frequency == heap->vector[minimum].frequency
+                 && strcmp(heap->vector[left].word, heap->vector[minimum].word) > 0) {
+            minimum = left;
+        }
     }
 
-    if (right < count
-        && heap->vector[right].frequency < heap->vector[minimum].frequency)
-    {
-        minimum = right;
+    if (right < count) {
+        if (heap->vector[right].frequency < heap->vector[minimum].frequency) {
+            minimum = right;
+        }
+        else if (heap->vector[right].frequency == heap->vector[minimum].frequency
+                 && strcmp(heap->vector[right].word, heap->vector[minimum].word) > 0) {
+            minimum = right;
+        }
     }
 
     if (minimum != index) {
@@ -167,7 +175,6 @@ heapInsert(Heap* heap,
            const char* word)
 {
 
-
     /* The word is already present in the heap, increase its frequency. */
     if (node->index != -1) {
 
@@ -196,9 +203,15 @@ heapInsert(Heap* heap,
 
     /*
      * The word is not present in the heap and the heap is full.  Replace the
-     * root with the new node.  The root is the least frequenct.
+     * root with the new node.
      */
-    else if (node->frequency > heap->vector[0].frequency) {
+    else if (
+             (node->frequency > heap->vector[0].frequency)
+             ||
+             ((node->frequency == heap->vector[0].frequency)
+              && (strcmp(word, heap->vector[0].word) < 0))
+            )
+    {
 
         heap->vector[0].node->index = -1;
         heap->vector[0].node = node;
@@ -212,6 +225,24 @@ heapInsert(Heap* heap,
         heapHeapify(heap, 0, heap->count);
 
     }
+
+#if 0
+    else if ((node->frequency == heap->vector[0].frequency)
+             && (strcmp(word, heap->vector[0].word) < 0))
+    {
+
+        heap->vector[0].node->index = -1;
+        heap->vector[0].node = node;
+        heap->vector[0].node->index = 0;
+        heap->vector[0].frequency = node->frequency;
+
+        /* Delete word no longer in the top frequency count. */
+        free(heap->vector[0].word);
+        heap->vector[0].word = strdup(word);
+
+        heapHeapify(heap, 0, heap->count);
+    }
+#endif
 
     return (0);
 
