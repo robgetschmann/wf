@@ -54,12 +54,11 @@ heapBuild(Heap* heap);
 
 static int
 heapHeapify(Heap* heap,
-			uint32_t index,
-			uint32_t count);
+            uint32_t index,
+            uint32_t count);
 
 /**
  * @brief
- * @details
  * @param
  * @return
  */
@@ -85,36 +84,88 @@ heapBuild(Heap* heap)
 }
 
 /**
- * @brief
- * @details
- * @param
- * @return
+ * @brief   apply the stock "heapify" to a heap
+ * @param   heap the heap to be "heapified"
+ * @param   the element within the heap be operated on
+ * @param   the number of elements in the heap
+ * @return  0 - success, 1 - failure
  */
-int
-heapInsert(Heap* heap,
-           TrieNode** node,
-           const char* word)
+static int
+heapHeapify(Heap* heap,
+            uint32_t index,
+            uint32_t count)
 {
 
-    // Case 1: the word is already present in heap
-    if ((*node)->index != -1) {
+    uint32_t left = 2*index + 1;
+    uint32_t right = left + 1;
+    uint32_t minimum = index;
 
-        heap->vector[(*node)->index].frequency++;
+    if (left < count
+        && heap->vector[left].frequency < heap->vector[minimum].frequency)
+    {
+        minimum = left;
+    }
 
-        heapHeapify(heap, (*node)->index, heap->count);
+    if (right < count
+        && heap->vector[right].frequency < heap->vector[minimum].frequency)
+    {
+        minimum = right;
+    }
+
+    if (minimum != index) {
+
+        HeapNode node;
+
+        /* Update the trie index into the heap. */
+        heap->vector[minimum].node->index = index;
+        heap->vector[index].node->index = minimum;
+
+        /* Swap the nodes. */
+        node = heap->vector[minimum];
+        heap->vector[minimum] = heap->vector[index];
+        heap->vector[index] = node;
+
+        heapHeapify(heap, minimum, count);
 
     }
 
-    // Case 2: Word is not present and heap is not full
+    return (0);
+
+}
+
+/**
+ * @brief
+ * @param   heap the heap to have an item inserted
+ * @param   node a pointer to the corresponding trie node
+ * @param   word the word to be inserted into the heap
+ * @return  0 - success, 1 - failure
+ */
+int
+heapInsert(Heap* heap,
+           TrieNode* node,
+           const char* word)
+{
+
+
+    /* The word is already present in the heap, increase its frequency. */
+    if (node->index != -1) {
+
+        heap->vector[node->index].frequency++;
+
+        heapHeapify(heap, node->index, heap->count);
+
+    }
+
+    /* The word is not present in the heap and the heap is not full. */
     else if (heap->count < heap->size) {
 
         uint32_t count = heap->count;
 
-        heap->vector[count].frequency = (*node)->frequency;
+        heap->vector[count].frequency = node->frequency;
         heap->vector[count].word = strdup(word);
 
-        heap->vector[count].node = *node;
-        (*node)->index = heap->count;
+        heap->vector[count].node = node;
+        node->index = heap->count;
 
         heap->count++;
 
@@ -122,15 +173,16 @@ heapInsert(Heap* heap,
 
     }
 
-    // Case 3: Word is not present and heap is full.And frequency of word
-    // is more than root.The root is the least frequent word in heap,
-    // replace root with new word
-    else if ((*node)->frequency > heap->vector[0].frequency) {
+    /*
+     * The word is not present in the heap and the heap is full.  Replace the
+     * root with the new node.  The root is the least frequenct.
+     */
+    else if (node->frequency > heap->vector[0].frequency) {
 
         heap->vector[0].node->index = -1;
-        heap->vector[0].node = *node;
+        heap->vector[0].node = node;
         heap->vector[0].node->index = 0;
-        heap->vector[0].frequency = (*node)->frequency;
+        heap->vector[0].frequency = node->frequency;
 
         /* Delete word no longer in the top frequency count. */
         free(heap->vector[0].word);
@@ -145,10 +197,9 @@ heapInsert(Heap* heap,
 }
 
 /**
- * @brief
- * @details
- * @param
- * @return
+ * @brief   allocated a new heap object of a given size
+ * @param   size the size of the heap
+ * @return  a pointer to the newly allocated heap object
  */
 Heap*
 heapNew(uint32_t size)
@@ -168,58 +219,9 @@ heapNew(uint32_t size)
 }
 
 /**
- * @brief
- * @details
- * @param
- * @return
- */
-static int
-heapHeapify(Heap* heap,
-            uint32_t index,
-			uint32_t count)
-{
-
-    uint32_t left = 2*index + 1;
-    uint32_t right = 2*index + 2;
-    uint32_t minimum = index;
-
-    if (left < count
-        && heap->vector[left].frequency < heap->vector[minimum].frequency)
-    {
-        minimum = left;
-    }
-
-    if (right < count
-        && heap->vector[right].frequency < heap->vector[minimum].frequency)
-    {
-        minimum = right;
-    }
-
-    if (minimum != index) {
-
-        HeapNode node;
-
-        heap->vector[minimum].node->index = index;
-        heap->vector[index].node->index = minimum;
-
-        /* Swap the nodes. */
-        node = heap->vector[minimum];
-        heap->vector[minimum] = heap->vector[index];
-        heap->vector[index] = node;
-
-        heapHeapify(heap, minimum, count);
-
-    }
-
-    return (0);
-
-}
-
-/**
- * @brief
- * @details
- * @param
- * @return
+ * @brief   sort the given heap
+ * @param   heap the heap to be sorted
+ * @return  0 - success, 1 - failure
  */
 int
 heapSort(Heap* heap)

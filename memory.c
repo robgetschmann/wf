@@ -58,7 +58,6 @@ extern char* __real_strdup(const char* string);
 
 /**
  * @brief   Wrapper for C library calloc()
- * @details
  * @param   Same parameters as C library calloc()
  * @return  A pointer to the memory allocated or NULL
  */
@@ -79,7 +78,6 @@ __wrap_calloc(size_t nmemb,
 
 /**
  * @brief   Wrapper for C library malloc()
- * @details
  * @param   Same parameters as C library malloc()
  * @return  A pointer to the memory allocated or NULL
  */
@@ -99,7 +97,6 @@ __wrap_malloc(size_t size)
 
 /**
  * @brief   Wrapper for C library realloc()
- * @details
  * @param   Same parameters as C library realloc()
  * @return  A pointer to the memory reallocated or NULL
  */
@@ -120,7 +117,6 @@ __wrap_realloc(void* memory,
 
 /**
  * @brief   Wrapper for C library strdup()
- * @details
  * @param   Same parameters as C library realloc()
  * @return  A pointer to the duplicated string
  */

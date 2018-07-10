@@ -70,10 +70,6 @@ typedef void (JobFunc)(Job* job);
 struct Job {
     JobFunc* entry;
     int channel[2];
-    struct {
-        int input;
-        int output;
-    } fd;
 };
 
 /*
@@ -86,8 +82,8 @@ static JobFunc jobSqueeze;
  * @brief   Vector of the jobs for processing the text word frequencies
  */
 static Job jobVector[] = {
-    { jobSqueeze,   { -1, -1},  { -1, -1 } },
-    { jobCount,     { -1, -1},  { -1, -1 } },
+    { jobSqueeze,   { -1, -1} },
+    { jobCount,     { -1, -1} },
 };
 
 /**
@@ -102,8 +98,7 @@ const uint32_t frequencyCount = 20;
 
 /**
  * @brief   Entry point for the word frequency count job
- * @details
- * @param
+ * @param   job the job entry details
  * @return  None
  */
 static void
@@ -111,17 +106,19 @@ __attribute__ ((noreturn))
 jobCount(Job* job)
 {
 
+    int input, output;
+
     /* The count job only reads from the pipe input, close the output. */
     close(job->channel[1]);
 
     /* Read input from the pipe, and write out out to standard output. */
-    job->fd.input = dup2(job->channel[0], STDIN_FILENO);
-    job->fd.output = STDOUT_FILENO;
+    input = dup2(job->channel[0], STDIN_FILENO);
+    output = STDOUT_FILENO;
 
     /* Open the input/output file descriptors as streams. */
-    FILE* ifp = fdopen(job->fd.input, "r");
+    FILE* ifp = fdopen(input, "r");
     assert(ifp);
-    FILE* ofp = fdopen(job->fd.output, "w");
+    FILE* ofp = fdopen(output, "w");
     assert(ofp);
 
     /*
@@ -135,8 +132,7 @@ jobCount(Job* job)
 
 /**
  * @brief   Entry point for the input filtering job
- * @details
- * @param
+ * @param   job the job entry details
  * @return  None
  */
 static void
@@ -144,17 +140,19 @@ __attribute__ ((noreturn))
 jobSqueeze(Job* job)
 {
 
+    int input, output;
+
     /* The squeeze job only writes to the pipe output, close the input. */
     close(job->channel[0]);
 
     /* Read input from standard input, and write out out to the pipe. */
-    job->fd.input = STDIN_FILENO;
-    job->fd.output = dup2(job->channel[1], STDOUT_FILENO);
+    input = STDIN_FILENO;
+    output = dup2(job->channel[1], STDOUT_FILENO);
 
     /* Open the input/output file descriptors as streams. */
-    FILE* ifp = fdopen(job->fd.input, "r");
+    FILE* ifp = fdopen(input, "r");
     assert(ifp);
-    FILE* ofp = fdopen(job->fd.output, "w");
+    FILE* ofp = fdopen(output, "w");
     assert(ofp);
 
     /*
@@ -167,17 +165,17 @@ jobSqueeze(Job* job)
 }
 
 /**
- * @brief   Entry point for the "wf" program
- * @details The main() function is the entry point for the "wf" program;  It
+ * @brief   entry point for the "wf" program
+ * @details the main() function is the entry point for the "wf" program;  It
  *          processes the command line arguments and spawns two child processes
  *          for performing word frequency for an input stream;  The first child
  *          process filters valid words;  The second child process performs the
  *          frequency analysis
- * @param   argc The command line argument count
- * @param   argv The command line argument vector
+ * @param   argc the command line argument count
+ * @param   argv the command line argument vector
  * @return  0 - success, 1 - filtering process failed, 2 - frequency analysis
- *          process failed, 3 - both failed
- * @todo    Improve handling of wait() child status processing
+ *          process failed, 3 - both failed, 4 - invalid invocation
+ * @todo    improve handling of wait() child status processing
  */
 int
 main(int argc,

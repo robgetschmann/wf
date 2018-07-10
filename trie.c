@@ -48,7 +48,6 @@
 
 /**
  * @brief   Allocate and initialize a new Trie Node from the heap
- * @details
  * @param   None
  * @return  A pointer to a new Trie Node
  */

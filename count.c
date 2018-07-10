@@ -56,14 +56,12 @@ dump(Heap* heap,
      FILE* fp);
 
 static int
-insert(TrieNode** root,
+insert(TrieNode* trie,
        Heap* heap,
-       const char* word,
-       const char* original);
+       const char* word);
 
 /**
  * @brief   Process a stream of words and determine each word's frequency
- * @details
  * @param   ifp the input stream containing newline delimited valid words
  * @param   ofp the output stream for the frequency count and word display
  * @return  0 - success, -1 - failure
@@ -77,13 +75,17 @@ count(FILE* ifp,
     static size_t buffer_size;
 
     Heap* heap = heapNew(frequencyCount);
-    TrieNode* root = NULL;
+    TrieNode* trie = trieNodeNew();
     int status = 0;
 
+    /*
+     * Process each newline delimited word in the input stream  and insert
+     * it into the trie.
+     */
     while (getdelim(&buffer, &buffer_size, '\n', ifp) != -1) {
         /* Eat the newline. */
         buffer[strlen(buffer)-1] = '\0';
-        insert(&root, heap, buffer, buffer);
+        insert(trie, heap, buffer);
     }
 
     /* End of input reached, report success. */
@@ -112,10 +114,6 @@ count(FILE* ifp,
 
 /**
  * @brief   Display the top frequency counts and the corresponding word
- * @details Display the top frequency counts; The first column contains
- *          the count and the second column contains the corresponding word;
- *          Each line is a record and the records are sorted in reverse
- *          numerical order based on the frequency count
  * @param   heap the heap containing the top frequency counts and word
  * @param   ofp the output file stream
  * @return  0 - success, -1 - failure
@@ -138,50 +136,47 @@ dump(Heap* heap,
 /**
  * @brief   Insert a word into a Trie and prioritize it in the corresponding
  *          heap
- * @details
- * @param   root Trie head
+ * @param   trie Trie head
  * @param   heap Heap for most frequent words in Trie
  * @param   word pointer to current character in word being inserted
- * @param   original pointer to original word being inserted
  * @return  0 - success, -1 - failure
  */
 static int
-insert(TrieNode** root,
+insert(TrieNode* trie,
        Heap* heap,
-       const char* word,
-       const char* original)
+       const char* word)
 {
 
-    if (!*root) {
+    const char* traverse = word;
+    TrieNode* node;
 
-        *root = trieNodeNew();
+    for (node = trie; *traverse != '\0'; traverse++) {
 
-    }
+        if (!node->child[tolower(*traverse)-'a']) {
+            node->child[tolower(*traverse)-'a'] = trieNodeNew();
+        }
 
-    if (*word != '\0') {
-
-        insert(&(*root)->child[tolower(*word) - 'a'],
-               heap,
-               word+1,
-               original);
+        node = node->child[tolower(*traverse)-'a'];
 
     }
 
+    /*
+     * At this point the terminating node in the trie has been reached
+     * and the word and frequency can be inserted or updated.
+     */
+
+    /* The word is already in the trie, update the frequency. */
+    if (node->complete == true) {
+        node->frequency++;
+    }
+    /* The word is new and needs to be inserted into the trie. */
     else {
-
-        // word is already present, increase the frequency
-        if ((*root)->complete == true) {
-            (*root)->frequency++;
-        }
-        else {
-            (*root)->complete = true;
-            (*root)->frequency = 1;
-        }
-
-        // Insert in min heap also
-        heapInsert(heap, root, original);
-
+        node->complete = true;
+        node->frequency = 1;
     }
+
+    /* Insert or update the word in the heap. */
+    heapInsert(heap, node, word);
 
     return (0);
 

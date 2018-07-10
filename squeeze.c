@@ -48,9 +48,6 @@
 
 /**
  * @brief   Filter input within the character class [a-zA-Z]
- * @details Filter the input stream to remove characters not in the class
- *          [a-zA-Z]; Words ([a-zA-Z]) will be output to the oufput file
- *          stream and delimited by a newline character.
  * @param   ifp input stream file pointer
  * @param   ofp output stream file pointer
  * @return  0 - success, -1 - failure

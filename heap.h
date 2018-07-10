@@ -81,7 +81,7 @@ heapNew(uint32_t size);
  */
 int
 heapInsert(Heap* heap,
-           TrieNode** node,
+           TrieNode* node,
            const char* word);
 
 /**
