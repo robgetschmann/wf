@@ -30,7 +30,9 @@ sample-test: \
 	sample-warandpeace \
 	sample-large \
 	sample-lexiographic-1 \
-	sample-lexiographic-2
+	sample-lexiographic-2 \
+	sample-null \
+	sample-single
 
 sample-mobydick: wf
 	@echo "Comparing 'Moby Dick' Frequencies"
@@ -61,6 +63,18 @@ sample-lexiographic-2: wf
 	@$(PWD)/wf sample/lexiographic-2.input > /tmp/lexiographic-2.output
 	@diff -w -q sample/lexiographic-2.output /tmp/lexiographic-2.output
 	@rm -f /tmp/lexiographic-2.output
+
+sample-null: wf
+	@echo "Comparing null Frequencies"
+	@$(PWD)/wf sample/null.input > /tmp/null.output
+	@diff -w -q sample/null.output /tmp/null.output
+	@rm -f /tmp/null.output
+
+sample-single: wf
+	@echo "Comparing single Frequencies"
+	@$(PWD)/wf sample/single.input > /tmp/single.output
+	@diff -w -q sample/single.output /tmp/single.output
+	@rm -f /tmp/single.output
 
 .PHONY: sample-test
 .PHONY: sample-mobydick
