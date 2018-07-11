@@ -48,14 +48,6 @@
 #include <heap.h>
 #include <trie.h>
 
-/*
- * function prototypes
- */
-static int
-insert(TrieNode* trie,
-       Heap* heap,
-       const char* word);
-
 /**
  * @brief   process a stream of words and determine each word's frequency
  * @param   ifp the input stream containing newline delimited valid words
@@ -70,19 +62,34 @@ count(FILE* ifp,
     static char* buffer;
     static size_t buffer_size;
 
+    /* Create a new trie and a new heap */
     Heap* heap = heapNew(frequencyCount);
     TrieNode* trie = trieNodeNew();
-    int status = 0;
 
     /*
      * Process each newline delimited word in the input stream  and insert
      * it into the trie.
      */
     while (getdelim(&buffer, &buffer_size, '\n', ifp) != -1) {
+
+        TrieNode* node;
+
         /* Eat the newline. */
         buffer[strlen(buffer)-1] = '\0';
-        insert(trie, heap, buffer);
+
+        node = trieInsert(trie, buffer);
+        assert(node);
+
+        heapInsert(heap, node, buffer);
+
     }
+
+    /* Free the buffer allocated by getdelim(). */
+    if (buffer) {
+        free(buffer);
+    }
+
+    int status = 0;
 
     /* End of input reached, report success. */
     if (feof(ifp)) {
@@ -93,67 +100,17 @@ count(FILE* ifp,
         status = -1;
     }
 
-    /* Sort the heap. */
-    heapSort(heap);
+    if (status == 0) {
 
-    /* Display the frequency of the top word counts. */
-    heapDump(heap, ofp);
+        /* Sort the heap. */
+        heapSort(heap);
 
-    /* Free the buffer allocated by getdelim(). */
-    if (buffer) {
-        free(buffer);
+        /* Display the frequency of the top word counts. */
+        heapDump(heap, ofp);
+
     }
 
     return (status);
-
-}
-
-/**
- * @brief   insert a word into a trie and prioritize it in the corresponding
- *          heap
- * @param   trie trie root
- * @param   heap Heap for most frequent words in trie
- * @param   word pointer to current character in word being inserted
- * @return  0 - success, -1 - failure
- */
-static int
-insert(TrieNode* trie,
-       Heap* heap,
-       const char* word)
-{
-
-    const char* traverse = word;
-    TrieNode* node;
-
-    for (node = trie; *traverse != '\0'; traverse++) {
-
-        if (!node->child[tolower(*traverse)-'a']) {
-            node->child[tolower(*traverse)-'a'] = trieNodeNew();
-        }
-
-        node = node->child[tolower(*traverse)-'a'];
-
-    }
-
-    /*
-     * At this point the terminating node in the trie has been reached
-     * and the word and frequency can be inserted or updated.
-     */
-
-    /* The word is already in the trie, update the frequency. */
-    if (node->complete == true) {
-        node->frequency++;
-    }
-    /* The word is new and needs to be inserted into the trie. */
-    else {
-        node->complete = true;
-        node->frequency = 1;
-    }
-
-    /* Insert or update the word in the heap. */
-    heapInsert(heap, node, word);
-
-    return (0);
 
 }
 

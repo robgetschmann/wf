@@ -47,6 +47,49 @@
 #include <trie.h>
 
 /**
+ * @brief   insert a word into a trie
+ * @param   trie trie root
+ * @param   word pointer to the word to be inserted
+ * @return  a pointer to the trie node containing the word
+ */
+TrieNode*
+trieInsert(TrieNode* trie,
+           const char* word)
+{
+
+    const char* traverse = word;
+    TrieNode* node;
+
+    for (node = trie; *traverse != '\0'; traverse++) {
+
+        if (!node->child[tolower(*traverse)-'a']) {
+            node->child[tolower(*traverse)-'a'] = trieNodeNew();
+        }
+
+        node = node->child[tolower(*traverse)-'a'];
+
+    }
+
+    /*
+     * At this point the terminating node in the trie has been reached
+     * and the word and frequency can be inserted or updated.
+     */
+
+    /* The word is already in the trie, update the frequency. */
+    if (node->complete == true) {
+        node->frequency++;
+    }
+    /* The word is new and needs to be inserted into the trie. */
+    else {
+        node->complete = true;
+        node->frequency = 1;
+    }
+
+    return (node);
+
+}
+
+/**
  * @brief   allocate and initialize a new Trie Node from the heap
  * @param   none
  * @return  a pointer to a new Trie Node
