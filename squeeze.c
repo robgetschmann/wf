@@ -61,11 +61,10 @@ squeeze(FILE* ifp,
     char buffer[4096];
     setvbuf(ofp, buffer, _IOLBF, sizeof(buffer));
 
-    bool squeezing = false;
+    bool squeezing = true;
     char byte = '\0';
-    int length = 0;
-    int read_count = 0;
-    int status = 0;
+    uint32_t length = 0;
+    size_t read_count = 0;
 
     /*
      * Process a byte at a time from the input stream.
@@ -93,6 +92,12 @@ squeeze(FILE* ifp,
         }
 
     }
+
+    if (length != 0) {
+        fputc('\n', ofp);
+    }
+
+    int status = 0;
 
     /* End of input reached, report success. */
     if (feof(ifp)) {
