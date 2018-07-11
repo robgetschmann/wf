@@ -59,9 +59,6 @@ count(FILE* ifp,
       FILE* ofp)
 {
 
-    static char* buffer;
-    static size_t buffer_size;
-
     /* Create a new trie and a new heap */
     Heap* heap = heapNew(frequencyCount);
     TrieNode* trie = trieNodeNew();
@@ -70,6 +67,9 @@ count(FILE* ifp,
      * Process each newline delimited word in the input stream  and insert
      * it into the trie.
      */
+    char* buffer = NULL;
+    size_t buffer_size = 0;
+
     while (getdelim(&buffer, &buffer_size, '\n', ifp) != -1) {
 
         TrieNode* node;
@@ -100,6 +100,7 @@ count(FILE* ifp,
         status = -1;
     }
 
+    /* Only sort and display if the input stream ended cleanly. */
     if (status == 0) {
 
         /* Sort the heap. */
