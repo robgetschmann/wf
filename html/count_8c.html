@@ -76,9 +76,6 @@ $(function() {
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a7a6c6aaceaf25a544858dd4a8d64d841"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="count_8c.html#a7a6c6aaceaf25a544858dd4a8d64d841">insert</a> (<a class="el" href="structTrieNode.html">TrieNode</a> *trie, <a class="el" href="structHeap.html">Heap</a> *heap, const char *word)</td></tr>
-<tr class="memdesc:a7a6c6aaceaf25a544858dd4a8d64d841"><td class="mdescLeft">&#160;</td><td class="mdescRight">insert a word into a trie and prioritize it in the corresponding heap  <a href="#a7a6c6aaceaf25a544858dd4a8d64d841">More...</a><br /></td></tr>
-<tr class="separator:a7a6c6aaceaf25a544858dd4a8d64d841"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8bed7b26825905f93a949a5d118cb2e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="count_8c.html#ac8bed7b26825905f93a949a5d118cb2e">count</a> (FILE *ifp, FILE *ofp)</td></tr>
 <tr class="memdesc:ac8bed7b26825905f93a949a5d118cb2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">process a stream of words and determine each word's frequency  <a href="#ac8bed7b26825905f93a949a5d118cb2e">More...</a><br /></td></tr>
 <tr class="separator:ac8bed7b26825905f93a949a5d118cb2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -132,59 +129,6 @@ LICENSE</h1>
   <table class="params">
     <tr><td class="paramname">ifp</td><td>the input stream containing newline delimited valid words </td></tr>
     <tr><td class="paramname">ofp</td><td>the output stream for the frequency count and word display </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>0 - success, -1 - failure </dd></dl>
-
-</div>
-</div>
-<a id="a7a6c6aaceaf25a544858dd4a8d64d841"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7a6c6aaceaf25a544858dd4a8d64d841">&#9670;&nbsp;</a></span>insert()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static int insert </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="structTrieNode.html">TrieNode</a> *&#160;</td>
-          <td class="paramname"><em>trie</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="structHeap.html">Heap</a> *&#160;</td>
-          <td class="paramname"><em>heap</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const char *&#160;</td>
-          <td class="paramname"><em>word</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>insert a word into a trie and prioritize it in the corresponding heap </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">trie</td><td>trie root </td></tr>
-    <tr><td class="paramname">heap</td><td><a class="el" href="structHeap.html" title="object representing a sorted heap ">Heap</a> for most frequent words in trie </td></tr>
-    <tr><td class="paramname">word</td><td>pointer to current character in word being inserted </td></tr>
   </table>
   </dd>
 </dl>

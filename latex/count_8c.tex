@@ -7,8 +7,6 @@
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
 \item 
-static int \mbox{\hyperlink{count_8c_a7a6c6aaceaf25a544858dd4a8d64d841}{insert}} (\mbox{\hyperlink{structTrieNode}{Trie\+Node}} $\ast$trie, \mbox{\hyperlink{structHeap}{Heap}} $\ast$heap, const char $\ast$word)
-\begin{DoxyCompactList}\small\item\em insert a word into a trie and prioritize it in the corresponding heap \end{DoxyCompactList}\item 
 int \mbox{\hyperlink{count_8c_ac8bed7b26825905f93a949a5d118cb2e}{count}} (F\+I\+LE $\ast$ifp, F\+I\+LE $\ast$ofp)
 \begin{DoxyCompactList}\small\item\em process a stream of words and determine each word\textquotesingle{}s frequency \end{DoxyCompactList}\end{DoxyCompactItemize}
 
@@ -55,28 +53,6 @@ function prototype
 {\em ifp} & the input stream containing newline delimited valid words \\
 \hline
 {\em ofp} & the output stream for the frequency count and word display \\
-\hline
-\end{DoxyParams}
-\begin{DoxyReturn}{Returns}
-0 -\/ success, -\/1 -\/ failure 
-\end{DoxyReturn}
-\mbox{\Hypertarget{count_8c_a7a6c6aaceaf25a544858dd4a8d64d841}\label{count_8c_a7a6c6aaceaf25a544858dd4a8d64d841}} 
-\index{count.\+c@{count.\+c}!insert@{insert}}
-\index{insert@{insert}!count.\+c@{count.\+c}}
-\subsubsection{\texorpdfstring{insert()}{insert()}}
-{\footnotesize\ttfamily static int insert (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structTrieNode}{Trie\+Node}} $\ast$}]{trie,  }\item[{\mbox{\hyperlink{structHeap}{Heap}} $\ast$}]{heap,  }\item[{const char $\ast$}]{word }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
-
-
-
-insert a word into a trie and prioritize it in the corresponding heap 
-
-
-\begin{DoxyParams}{Parameters}
-{\em trie} & trie root \\
-\hline
-{\em heap} & \mbox{\hyperlink{structHeap}{Heap}} for most frequent words in trie \\
-\hline
-{\em word} & pointer to current character in word being inserted \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}

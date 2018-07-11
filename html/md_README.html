@@ -80,13 +80,17 @@ $(function() {
 <li>Frequencies are determined based on case independence. For example "Hello" and "hello" are considered equivalent.</li>
 </ul>
 <h1>Shell Equivalent Command <a class="el" href="structJob.html" title="object for maintaining a child process &quot;job&quot; configurables ">Job</a></h1>
-<p>The <em>wf</em> program produces equivalent output to the following <em>UN*X</em> command line job. Note that <em>wf.sh</em> is included in the package distribution and the command documented below. <em>GNU</em> and <em>BSD</em> flavors of the below commands have slight differences. Please note that whitespace output by the shell command below will be different between <em>GNU</em> and <em>BSD</em>. </p><hr/>
+<p>The <em>wf</em> program produces equivalent output to the following <em>UN*X</em> command line job. Note that <em>wf.sh</em> is included in the scripts directory and is shown in the command documented below. <em>GNU</em> and <em>BSD</em> flavors of the below commands have slight differences. Please note that whitespace output by the shell command below will be different between <em>GNU</em> and <em>BSD</em>. </p><hr/>
 <div class="fragment"><div class="line">#! /usr/bin/env sh</div><div class="line"></div><div class="line">cat $1 \</div><div class="line">    | tr -cs &#39;a-zA-Z&#39; &#39;[\n*]&#39; \</div><div class="line">    | grep -v &#39;^$&#39; \</div><div class="line">    | tr &#39;[:upper:]&#39; &#39;[:lower:]&#39;\</div><div class="line">    | sort \</div><div class="line">    | uniq -c \</div><div class="line">    | sort -nr \</div><div class="line">    | head -20</div><div class="line"></div><div class="line">exit $?</div></div><!-- fragment --> <hr/>
 <h1>Usage</h1>
 <h2>Example</h2>
 <p>The following demonstrates executing the <em>wf</em> program with the word "hello" repeated three times as input with different cases. The output is a single record reporting that "hello" has a frequency of three within the input stream. </p><hr/>
 <div class="fragment"><div class="line">$ echo &quot;HELLO Hello hello&quot; | wf</div><div class="line">      3 hello</div></div><!-- fragment --> <hr/>
 <h2>Testing</h2>
+<h1>Enhancements</h1>
+<ol type="1">
+<li>Do this... </li>
+</ol>
 </div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
