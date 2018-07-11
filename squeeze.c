@@ -57,15 +57,6 @@ squeeze(FILE* ifp,
         FILE* ofp)
 {
 
-    /* Output will be fully buffered. */
-    char buffer[4096];
-    setvbuf(ofp, buffer, _IOLBF, sizeof(buffer));
-
-    bool squeezing = true;
-    char byte = '\0';
-    uint32_t length = 0;
-    size_t read_count = 0;
-
     /*
      * Process a byte at a time from the input stream.
      *
@@ -77,7 +68,11 @@ squeeze(FILE* ifp,
      * The squeezing Boolean is true when multiple contiguous characters
      * NOT in the class [a-zA-Z] are being processed.
      */
-    while ((read_count = fread(&byte, 1, 1, ifp))) {
+    char byte = '\0';
+    uint32_t length = 0;
+    bool squeezing = true;
+
+    while (fread(&byte, 1, 1, ifp) == 1) {
 
         if (isalpha(byte)) {
             fputc(tolower(byte), ofp);
