@@ -148,7 +148,7 @@ jobSqueeze(Job* job)
     /* The squeeze job only writes to the pipe output, close the input. */
     close(job->channel[0]);
 
-    /* Read input from standard input, and write out out to the pipe. */
+    /* Read input from standard input, and write out to the pipe. */
     input = STDIN_FILENO;
     output = dup2(job->channel[1], STDOUT_FILENO);
 
@@ -208,6 +208,7 @@ main(int argc,
         case 2: {
             fclose(stdin);
             stdin = fopen(argv[1], "r");
+            assert(stdin);
             break;
         }
 
