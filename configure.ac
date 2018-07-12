@@ -8,6 +8,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror foreign])
 
 AC_PROG_CC
+AC_PROG_CC_C99
 
 AC_CHECK_HEADERS([unistd.h])
 AC_CHECK_HEADER_STDBOOL
