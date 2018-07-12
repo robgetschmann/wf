@@ -88,6 +88,7 @@ squeeze(FILE* ifp,
 
     }
 
+    /* If a valid word was in process terminate the record. */
     if (length != 0) {
         fputc('\n', ofp);
     }

@@ -72,12 +72,10 @@ count(FILE* ifp,
 
     while (getdelim(&buffer, &buffer_size, '\n', ifp) != -1) {
 
-        TrieNode* node;
-
         /* Eat the newline. */
         buffer[strlen(buffer)-1] = '\0';
 
-        node = trieInsert(trie, buffer);
+        TrieNode* node = trieInsert(trie, buffer);
         assert(node);
 
         heapInsert(heap, node, buffer);
