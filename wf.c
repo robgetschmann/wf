@@ -143,7 +143,7 @@ __attribute__ ((noreturn))
 jobSqueeze(Job* job)
 {
 
-    int input, output;
+    int input, output; /* input and output file descriptors */
 
     /* The squeeze job only writes to the pipe output, close the input. */
     close(job->channel[0]);
