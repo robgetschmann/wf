@@ -106,12 +106,12 @@ __attribute__ ((noreturn))
 jobCount(Job* job)
 {
 
-    int input, output;
+    int input, output; /* input and output file descriptors */
 
     /* The count job only reads from the pipe input, close the output. */
     close(job->channel[1]);
 
-    /* Read input from the pipe, and write out out to standard output. */
+    /* Read input from the pipe, and write out to standard output. */
     input = dup2(job->channel[0], STDIN_FILENO);
     output = STDOUT_FILENO;
 
