@@ -193,7 +193,9 @@ main(int argc,
 
         /* Error - zero or one command line argument only! */
         default: {
-            fprintf(stderr, "usage: %s [ <FILE> ]\n", basename(argv[0]));
+            fprintf(stderr,
+                    "usage: %s [ <FILE> | \"-\" ]\n",
+                    basename(argv[0]));
             exit (4);
             break;
         }
@@ -206,9 +208,12 @@ main(int argc,
 
         /* A single command line argument provided. */
         case 2: {
-            fclose(stdin);
-            stdin = fopen(argv[1], "r");
-            assert(stdin);
+            /* "-" as the file name indicates standard input. */
+            if (strncmp(argv[1], "-", strlen("-") != 0)) {
+                fclose(stdin);
+                stdin = fopen(argv[1], "r");
+                assert(stdin);
+            }
             break;
         }
 
