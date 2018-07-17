@@ -28,6 +28,7 @@ wf_SOURCES = \
 sample-test: \
 	sample-mobydick \
 	sample-warandpeace \
+	sample-bsd-ls \
 	sample-large \
 	sample-lexiographic-1 \
 	sample-lexiographic-2 \
@@ -45,6 +46,12 @@ sample-warandpeace: wf
 	@$(PWD)/wf sample/warandpeace.input > /tmp/warandpeace.output
 	@diff -w -q sample/warandpeace.output /tmp/warandpeace.output
 	@rm -f /tmp/warandpeace.output
+
+sample-bsd-ls: wf
+	@echo "Comparing 'BSD ls Binary' Frequencies"
+	@$(PWD)/wf sample/bsd-ls.input > /tmp/bsd-ls.output
+	@diff -w -q sample/bsd-ls.output /tmp/bsd-ls.output
+	@rm -f /tmp/bsd-ls.output
 
 sample-large: wf
 	@echo "Comparing large Frequencies"
