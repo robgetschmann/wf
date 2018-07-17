@@ -64,7 +64,7 @@ count(FILE* ifp,
     TrieNode* trie = trieNodeNew();
 
     /*
-     * Process each newline delimited word in the input stream  and insert
+     * Process each newline delimited word in the input stream and insert
      * it into the trie.
      */
     char* buffer = NULL;
