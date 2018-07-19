@@ -106,20 +106,14 @@ __attribute__ ((noreturn))
 jobCount(Job* job)
 {
 
-    int input, output; /* input and output file descriptors */
+    int fd; /* input file descriptor */
 
     /* The count job only reads from the pipe input, close the output. */
     close(job->channel[1]);
 
     /* Read input from the pipe, and write out to standard output. */
-    input = dup2(job->channel[0], STDIN_FILENO);
-    output = STDOUT_FILENO;
-
-    /* Open the input/output file descriptors as streams. */
-    FILE* ifp = fdopen(input, "r");
-    assert(ifp);
-    FILE* ofp = fdopen(output, "w");
-    assert(ofp);
+    fd = dup2(job->channel[0], STDIN_FILENO);
+    assert(fd != -1);
 
     /*
      * Exit the child process with the return status from count().
@@ -129,7 +123,7 @@ jobCount(Job* job)
      * Final cleanup of dynamically allocated memory will not be performed
      * since operating system takes care of this when the process terminates.
      */
-    exit(count(ifp, ofp));
+    exit(count(stdin, stdout));
 
 }
 
@@ -143,20 +137,14 @@ __attribute__ ((noreturn))
 jobSqueeze(Job* job)
 {
 
-    int input, output; /* input and output file descriptors */
+    int fd; /* output file descriptor */
 
     /* The squeeze job only writes to the pipe output, close the input. */
     close(job->channel[0]);
 
     /* Read input from standard input, and write out to the pipe. */
-    input = STDIN_FILENO;
-    output = dup2(job->channel[1], STDOUT_FILENO);
-
-    /* Open the input/output file descriptors as streams. */
-    FILE* ifp = fdopen(input, "r");
-    assert(ifp);
-    FILE* ofp = fdopen(output, "w");
-    assert(ofp);
+    fd = dup2(job->channel[1], STDOUT_FILENO);
+    assert(fd != -1);
 
     /*
      * Exit the child process with the return status from squeeze().
@@ -166,7 +154,7 @@ jobSqueeze(Job* job)
      * Final cleanup of dynamically allocated memory will not be performed
      * since operating system takes care of this when the process terminates.
      */
-    exit(squeeze(ifp, ofp));
+    exit(squeeze(stdin, stdout));
 
 }
 
