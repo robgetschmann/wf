@@ -54,10 +54,9 @@ typedef struct TrieNode TrieNode;
  * @brief   object representing a trie node
  */
 struct TrieNode {
-    bool complete;                          /** termination reached */
     uint32_t frequency;                     /** word frequency */
     int32_t index;                          /** word index in heap */
-    TrieNode* child[TRIE_SIZE];             /* child nodes */
+    TrieNode* child[TRIE_SIZE];             /** child nodes */
 };
 
 /**

@@ -74,16 +74,7 @@ trieInsert(TrieNode* trie,
      * At this point the terminating node in the trie has been reached
      * and the word and frequency can be inserted or updated.
      */
-
-    /* The word is already in the trie, update the frequency. */
-    if (node->complete == true) {
-        node->frequency++;
-    }
-    /* The word is new and needs to be inserted into the trie. */
-    else {
-        node->complete = true;
-        node->frequency = 1;
-    }
+    node->frequency++;
 
     return (node);
 
@@ -102,7 +93,6 @@ trieNodeNew(void)
 
     node = calloc(1, sizeof(*node));
 
-    node->complete = false;
     node->frequency = 0;
     node->index = -1;
 
