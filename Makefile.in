@@ -802,7 +802,7 @@ sample-warandpeace: wf
 	@rm -f /tmp/warandpeace.output
 
 sample-bsd-ls: wf
-	@echo "Comparing 'BSD ls Binary' Frequencies"
+	@echo "Comparing BSD ls Binary Frequencies"
 	@$(PWD)/wf sample/bsd-ls.input > /tmp/bsd-ls.output
 	@diff -w -q sample/bsd-ls.output /tmp/bsd-ls.output
 	@rm -f /tmp/bsd-ls.output
