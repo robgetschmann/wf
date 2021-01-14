@@ -14,7 +14,7 @@
  * @section LICENSE
  *
  * ==============================
- * Copyright (c) 2018, Robert A. Getschmann <rob@getschmann.net>
+ * Copyright © 2018, Robert A. Getschmann <rob@getschmann.net>
  * All rights reserved.
  * 
  * Redistribution and use in source and binary forms, with or without

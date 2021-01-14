@@ -18,7 +18,7 @@
  *
  * ===========================================================================
  *
- * Copyright (c) 2018, Robert A. Getschmann <rob@getschmann.net>
+ * Copyright © 2018, Robert A. Getschmann <rob@getschmann.net>
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -197,7 +197,7 @@ main(int argc,
         /* A single command line argument provided. */
         case 2: {
             /* "-" as the file name indicates standard input. */
-            if (strncmp(argv[1], "-", strlen("-") != 0)) {
+            if (strncmp(argv[1], "-", strlen("-")) != 0) {
                 fclose(stdin);
                 stdin = fopen(argv[1], "r");
                 assert(stdin);

@@ -100,4 +100,8 @@ target will run all of the sample tests.  When comparing the output the
 3. Optimize the heapNode and trieNode objects to be less tethered to each
    other and more generic.
 
+4. Memory cleanup is not performed since the filter terminates immediately
+   after processing all of the input.  Function to clean up dynamically
+   allocated object can be added.
+
 ---
