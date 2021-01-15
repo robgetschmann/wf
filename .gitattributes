@@ -1,5 +1,2 @@
-*.c linguist-language=Java
-html/* linguist-documentation
-latex/* linguist-documentation
-sample/* linguist-vendored
-script/* linguist-vendored
+* linguist-vendored
+*.c linguist-vendored=false
