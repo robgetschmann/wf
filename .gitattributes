@@ -1,2 +1,4 @@
 html/* linguist-documentation
 latex/* linguist-documentation
+sample/* linguist-vendored
+script/* linguist-vendored
