@@ -1,1 +1,2 @@
-*.c linguist-detectable=true
+html/* linguist-documentation
+latex/* linguist-documentation
