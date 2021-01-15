@@ -1,4 +1,5 @@
+*.c linguist-language=Java
 html/* linguist-documentation
 latex/* linguist-documentation
-sample/* linguist-detectable=false
-script/* linguist-detectable=false
+sample/* linguist-vendored
+script/* linguist-vendored
